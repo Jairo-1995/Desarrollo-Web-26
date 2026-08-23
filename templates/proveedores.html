@@ -26,25 +26,27 @@
             <thead class="table-success">
                 <tr>
                     <th>ID</th>
-                    <th>Empresa</th>
-                    <th>Contacto</th>
-                    <th>Teléfono</th>
+                    <th>Proveedor</th>
+                    <th>Producto principal</th>
+                    <th>Ciudad</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Fila de ejemplo -->
+                {% for proveedor in proveedores %}
                 <tr>
-                    <td>PROV-001</td>
-                    <td>Artesanías del Napo</td>
-                    <td>María Gualinga</td>
-                    <td>0998877665</td>
+                    <td>PROV-{{ '%03d'|format(proveedor.id) }}</td>
+                    <td>{{ proveedor.nombre }}</td>
+                    <td>{{ proveedor.producto_principal }}</td>
+                    <td>{{ proveedor.ciudad }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary">Editar</button>
                         <button class="btn btn-sm btn-outline-info">Ver Productos</button>
                     </td>
                 </tr>
-                <!-- Aquí se cargarían más proveedores dinámicamente -->
+                {% else %}
+                <tr><td colspan="5" class="text-center text-muted">No hay proveedores registrados.</td></tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

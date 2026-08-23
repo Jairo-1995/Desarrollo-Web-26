@@ -35,19 +35,27 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Fila de ejemplo -->
+                {% for factura in facturas %}
                 <tr>
-                    <td>FAC-001</td>
-                    <td>Juan Pérez</td>
-                    <td>2026-08-15</td>
-                    <td class="text-success fw-bold">$45.50</td>
-                    <td><span class="badge bg-success">Pagada</span></td>
+                    <td>{{ factura.numero }}</td>
+                    <td>{{ factura.cliente }}</td>
+                    <td>{{ factura.fecha }}</td>
+                    <td class="text-success fw-bold">${{ '%.2f'|format(factura.total) }}</td>
+                    <td>
+                        {% if factura.estado == 'Pagada' %}
+                        <span class="badge bg-success">{{ factura.estado }}</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">{{ factura.estado }}</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary">Ver PDF</button>
                         <button class="btn btn-sm btn-outline-warning">Anular</button>
                     </td>
                 </tr>
-                <!-- Aquí se cargarían más facturas dinámicamente -->
+                {% else %}
+                <tr><td colspan="6" class="text-center text-muted">No hay facturas registradas.</td></tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

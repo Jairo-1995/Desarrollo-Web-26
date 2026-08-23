@@ -33,18 +33,20 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Fila de ejemplo -->
+                {% for cliente in clientes %}
                 <tr>
-                    <td>CLI-001</td>
-                    <td>Juan Pérez</td>
-                    <td>juan.perez@example.com</td>
-                    <td>0987654321</td>
+                    <td>CLI-{{ '%03d'|format(cliente.id) }}</td>
+                    <td>{{ cliente.nombre }}</td>
+                    <td>{{ cliente.correo }}</td>
+                    <td>{{ cliente.telefono }}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary">Editar</button>
                         <button class="btn btn-sm btn-outline-info">Ver Perfil</button>
                     </td>
                 </tr>
-                <!-- Aquí se cargarían más clientes dinámicamente -->
+                {% else %}
+                <tr><td colspan="5" class="text-center text-muted">No hay clientes registrados.</td></tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

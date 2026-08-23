@@ -7,9 +7,30 @@
     <h1 class="mb-4">Productos disponibles</h1>
     <p>Explora nuestro catálogo completo de productos amazónicos. Aquí puedes ver los detalles de cada artículo, agregarlos al carrito y más.</p>
     
-    <!-- Productos Disponibles (generado por script.js) -->
+    <!-- Productos disponibles generados desde la lista enviada por Flask. -->
     <article class="bg-light p-4 rounded shadow mt-4">
-        <div id="productos-lista" class="row"></div>
+        <div class="row g-4">
+            {% for producto in productos %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ url_for('static', filename='img/' ~ producto.imagen) }}" class="card-img-top" alt="{{ producto.nombre }}" loading="lazy">
+                    <div class="card-body">
+                        <span class="badge text-bg-success mb-2">{{ producto.categoria|upper }}</span>
+                        <h2 class="h5 card-title">{{ producto.nombre }}</h2>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <p class="card-text mb-1">Precio: ${{ '%.2f'|format(producto.precio) }} por {{ producto.unidad }}</p>
+                        {% if producto.stock > 0 %}
+                        <p class="card-text text-success">Disponible ({{ producto.stock }} unidades)</p>
+                        {% else %}
+                        <p class="card-text text-danger">Agotado</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="mb-0">No hay productos disponibles por el momento.</p>
+            {% endfor %}
+        </div>
     </article>
 </div>
 {% endblock %}
