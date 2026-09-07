@@ -10,9 +10,9 @@
     <!-- Barra de acciones y filtros -->
     <div class="card shadow-sm mb-4">
         <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
-            <button class="btn btn-success mb-2 mb-md-0">
+            <a href="{{ url_for('crear_factura') }}" class="btn btn-success mb-2 mb-md-0">
                 Crear Nueva Factura
-            </button>
+            </a>
             <div class="d-flex flex-wrap gap-2 align-items-center">
                 <label for="filtro-fecha" class="form-label mb-0 me-2">Filtrar por fecha:</label>
                 <input type="date" id="filtro-fecha" class="form-control" style="width: auto;">
@@ -49,8 +49,11 @@
                         {% endif %}
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary">Ver PDF</button>
-                        <button class="btn btn-sm btn-outline-warning">Anular</button>
+                        <a href="{{ url_for('editar_factura', numero=factura.numero) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{{ url_for('eliminar_factura', numero=factura.numero) }}" class="d-inline" onsubmit="return confirm('¿Eliminar esta factura?');">
+                            {{ formulario_eliminar.hidden_tag() }}
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
                     </td>
                 </tr>
                 {% else %}

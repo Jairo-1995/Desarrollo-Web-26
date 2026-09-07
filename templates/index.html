@@ -46,10 +46,83 @@
                     </div>
 
                     <div class="col-md-6 text-center">
-                        <img src="/static/img/personas.jpg" class="img-fluid imagen-quienes" alt="Productos Amazónicos" loading="lazy">
+                        <img src="{{ url_for('static', filename='img/personas.jpg') }}" class="img-fluid imagen-quienes" alt="Productos Amazónicos" loading="lazy">
                     </div>
                 </div>
             </article>
+        </section>
+
+        <!-- PRODUCTOS DISPONIBLES -->
+        <section id="productos-disponibles" class="container py-5">
+            <h2 class="text-center mb-4">Productos Amazónicos Disponibles</h2>
+            <div class="row g-4">
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename='img/caña.jpg') }}" class="card-img-top" alt="Caña amazónica" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">Caña</h3>
+                            <p class="card-text">Caña fresca de la Amazonía, ideal para bebidas tradicionales y dulces.</p>
+                            <p class="fw-bold text-success">$1.00 / unidad</p>
+                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename='img/morete.jpg') }}" class="card-img-top" alt="Morete amazónico" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">Morete</h3>
+                            <p class="card-text">Fruto amazónico tradicional para usos culinarios y medicinales.</p>
+                            <p class="fw-bold text-success">$3.00 / kilogramo</p>
+                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename='img/ungurahua.jpg') }}" class="card-img-top" alt="Ungurahua amazónica" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">Ungurahua</h3>
+                            <p class="card-text">Fruto usado tradicionalmente en preparados de cuidado personal.</p>
+                            <p class="fw-bold text-success">$3.50 / kilogramo</p>
+                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename='img/miel.jpg') }}" class="card-img-top" alt="Miel amazónica" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">Miel Amazónica</h3>
+                            <p class="card-text">Miel pura y orgánica recolectada de colmenas silvestres.</p>
+                            <p class="fw-bold text-success">$5.00 / frasco</p>
+                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename='img/yuca.jpg') }}" class="card-img-top" alt="Yuca fresca" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">Yuca Fresca</h3>
+                            <p class="card-text">Tubérculo amazónico nutritivo y versátil para tus comidas.</p>
+                            <p class="fw-bold text-success">$5.00 / kg</p>
+                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <img src="{{ url_for('static', filename='img/platanos.jpg') }}" class="card-img-top" alt="Plátanos amazónicos" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="h5 card-title">Plátanos Amazónicos</h3>
+                            <p class="card-text">Plátanos frescos y naturales cultivados en nuestros campos.</p>
+                            <p class="fw-bold text-success">$6.00 / racimo</p>
+                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
         </section>
 
         <!-- SECCION DINAMICA -->
@@ -60,7 +133,7 @@
 
                 <div class="row align-items-center">
                     <div class="col-md-5 text-center mb-4 mb-md-0">
-                        <img id="producto-imagen" src="/static/img/aretes.jpg" class="img-fluid imagen-dinamica" alt="Artesanías amazonicas" loading="lazy">
+                        <img id="producto-imagen" src="{{ url_for('static', filename='img/aretes.jpg') }}" class="img-fluid imagen-dinamica" alt="Artesanías amazonicas" loading="lazy">
                     </div>
 
                     <div class="col-md-7">

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar producto' if editando else 'Registrar producto' }}{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <article class="formulario-producto">
+        <h1 class="text-center mb-4">{{ 'Editar producto' if editando else 'Registrar producto' }}</h1>
+        <form method="post" novalidate>
+            {{ form.hidden_tag() }}
+            {% for field in [form.nombre, form.categoria, form.descripcion, form.precio, form.unidad, form.stock, form.imagen] %}
+            <div class="mb-3">
+                {{ field.label(class="form-label") }}
+                {{ field(class="form-select" if field.name == "categoria" else "form-control") }}
+                {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-success" type="submit">{{ 'Guardar cambios' if editando else 'Guardar producto' }}</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('productos') }}">Cancelar</a>
+        </form>
+    </article>
+</section>
+{% endblock %}

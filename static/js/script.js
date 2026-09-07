@@ -64,9 +64,9 @@
             descripcion: "Ingredientes y alimentos provenientes de la selva amazónica, cultivados de manera sostenible.",
             imagen: "/static/img/producto.jpeg",
             alt: "Chocolate artesanal"
-            
-            
-        
+
+
+
         }
     ];
 
@@ -145,7 +145,7 @@
             nombre: "Choclo",
             descripcion: "Maíz fresco de la región amazónica, ideal para preparar platos tradicionales.",
             precio: "$3.00 por kg",
-            imagen: "/static/img/choclo.jpg",
+            imagen: "/static/img/maiz.webp",
             alt: "Choclo"
         },
         {
@@ -263,10 +263,8 @@
 
     function cargarPlantillasBase() {
         const menuPrincipal = document.getElementById("menu-principal");
-        const piePagina = document.getElementById("app-footer");
 
         if (menuPrincipal) menuPrincipal.innerHTML = plantillaMenu();
-        if (piePagina) piePagina.innerHTML = plantillaPiePagina();
     }
 
     function actualizarBotonesProducto(botonActivo) {
@@ -389,7 +387,7 @@
         const titulo = crearElemento("h5", ["card-title"], producto.nombre);
         const descripcion = crearElemento("p", ["card-text"], producto.descripcion);
         const precio = crearElemento("p", ["text-success", "fw-bold", "fs-5"], producto.precio);
-        
+
         const botonera = crearElemento("div", ["d-flex", "gap-2"]);
         const botonComprar = crearElemento("button", ["btn", "btn-success", "btn-sm"], "Comprar");
         const botonMasInfo = crearElemento("button", ["btn", "btn-outline-secondary", "btn-sm"], "Más Información");
@@ -402,7 +400,7 @@
         botonMasInfo.addEventListener("click", () => mostrarDetalleProducto(producto));
 
         botonera.append(botonComprar, botonMasInfo);
-        
+
         cuerpo.append(titulo, descripcion);
         if (producto.categoria) {
             cuerpo.appendChild(crearElemento("span", ["badge", "bg-success", "mb-3"], producto.categoria));

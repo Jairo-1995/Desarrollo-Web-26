@@ -4,33 +4,60 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="mb-4">Productos disponibles</h1>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <h1 class="mb-0">Productos disponibles</h1>
+        <a href="{{ url_for('crear_producto') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Agregar producto
+        </a>
+    </div>
     <p>Explora nuestro catálogo completo de productos amazónicos. Aquí puedes ver los detalles de cada artículo, agregarlos al carrito y más.</p>
-    
-    <!-- Productos disponibles generados desde la lista enviada por Flask. -->
-    <article class="bg-light p-4 rounded shadow mt-4">
-        <div class="row g-4">
-            {% for producto in productos %}
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ url_for('static', filename='img/' ~ producto.imagen) }}" class="card-img-top" alt="{{ producto.nombre }}" loading="lazy">
-                    <div class="card-body">
-                        <span class="badge text-bg-success mb-2">{{ producto.categoria|upper }}</span>
-                        <h2 class="h5 card-title">{{ producto.nombre }}</h2>
-                        <p class="card-text">{{ producto.descripcion }}</p>
-                        <p class="card-text mb-1">Precio: ${{ '%.2f'|format(producto.precio) }} por {{ producto.unidad }}</p>
+
+    <!-- Productos disponibles en una tabla HTML con estilos Bootstrap -->
+    <div class="table-responsive mt-4">
+        <table class="table table-striped table-hover align-middle bg-light shadow-sm rounded">
+            <thead class="table-success">
+                <tr>
+                    <th>ID</th>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Unidad</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>PRD-{{ '%03d'|format(producto.id) }}</td>
+                    <td><img src="{{ url_for('static', filename='img/' ~ producto.imagen) }}" alt="{{ producto.nombre }}" width="60" height="45" class="rounded" loading="lazy"></td>
+                    <td>{{ producto.nombre }}</td>
+                    <td><span class="badge text-bg-success">{{ producto.categoria|upper }}</span></td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>${{ '%.2f'|format(producto.precio) }}</td>
+                    <td>{{ producto.unidad }}</td>
+                    <td>
                         {% if producto.stock > 0 %}
-                        <p class="card-text text-success">Disponible ({{ producto.stock }} unidades)</p>
+                        <span class="text-success">Disponible ({{ producto.stock }})</span>
                         {% else %}
-                        <p class="card-text text-danger">Agotado</p>
+                        <span class="text-danger">Agotado</span>
                         {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <p class="mb-0">No hay productos disponibles por el momento.</p>
-            {% endfor %}
-        </div>
-    </article>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('editar_producto', producto_id=producto.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{{ url_for('eliminar_producto', producto_id=producto.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este producto?');">
+                            {{ formulario_eliminar.hidden_tag() }}
+                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" class="text-center text-muted">No hay productos disponibles por el momento.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

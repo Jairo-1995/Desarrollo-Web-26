@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar cliente' if editando else 'Registrar cliente' }}{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <article class="formulario-producto">
+        <h1 class="text-center mb-4">{{ 'Editar cliente' if editando else 'Registrar cliente' }}</h1>
+        <form method="post" novalidate>
+            {{ form.hidden_tag() }}
+            {% for error in form.csrf_token.errors %}
+            <div class="alert alert-danger" role="alert">
+                La sesiÃ³n del formulario expirÃ³. Recarga la pÃ¡gina e intÃ©ntalo nuevamente.
+            </div>
+            {% endfor %}
+            {% for field in [form.nombre, form.correo, form.telefono] %}
+            <div class="mb-3">
+                {{ field.label(class="form-label") }}
+                {{ field(class="form-control") }}
+                {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+            </div>
+            {% endfor %}
+            <button class="btn btn-success" type="submit">{{ 'Guardar cambios' if editando else 'Guardar cliente' }}</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('clientes') }}">Cancelar</a>
+        </form>
+    </article>
+</section>
+{% endblock %}
