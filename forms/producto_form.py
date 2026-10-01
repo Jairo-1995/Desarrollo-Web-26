@@ -14,6 +14,17 @@ CATEGORIAS = [
 class FormularioProducto(FlaskForm):
     """Formulario para registrar o editar un producto."""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Proveedores cargados desde la base de datos para el select.
+        import database
+        filas = database.get_db().execute(
+            "SELECT id, nombre FROM proveedores ORDER BY nombre"
+        ).fetchall()
+        self.proveedor.choices = [("", "Sin proveedor (opcional)")] + [
+            (str(f["id"]), f["nombre"]) for f in filas
+        ]
+
     nombre = StringField(
         "Nombre",
         validators=[DataRequired(message="El nombre es obligatorio."),
@@ -47,4 +58,9 @@ class FormularioProducto(FlaskForm):
     imagen = StringField(
         "Imagen",
         validators=[Optional(), Length(max=100, message="Máximo 100 caracteres.")],
+    )
+    proveedor = SelectField(
+        "Proveedor",
+        choices=[],
+        validators=[Optional()],
     )

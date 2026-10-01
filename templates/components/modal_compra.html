@@ -1,0 +1,197 @@
+<!-- ============================================================
+     Ventana flotante de compra (modal) - reutilizable
+     Se abre al pulsar cualquier botón .btn-comprar que tenga
+     data-producto, data-precio, data-unidad, data-origen y
+     data-imagen. Muestra la información del producto y pide
+     los datos necesarios para completar la compra.
+     ============================================================ -->
+<div class="modal fade" id="modalCompraRapida" tabindex="-1" aria-labelledby="modalCompraTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content modal-compra">
+            <div class="modal-header modal-compra-header">
+                <h6 class="modal-title" id="modalCompraTitulo">
+                    <i class="bi bi-cart-check-fill"></i> ¡Completa tu compra!
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="formCompraRapida" method="post" action="{{ url_for('comprar') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="producto" id="compraProducto">
+                <input type="hidden" name="origen" id="compraOrigen" value="inicio">
+                <input type="hidden" name="total" id="compraTotal">
+                <div class="modal-body">
+                    <!-- Resumen del producto -->
+                    <div class="compra-resumen">
+                        <img id="compraImagen" src="" alt="Imagen del producto" class="compra-resumen-img">
+                        <div class="compra-resumen-datos">
+                            <span id="compraProductoTitulo" class="compra-producto-nombre"></span>
+                            <p class="mb-0 fw-bold" id="compraPrecio"></p>
+                        </div>
+                    </div>
+
+                    <p class="text-center compra-instruccion mb-2">
+                        <i class="bi bi-truck"></i> Datos para el envío:
+                    </p>
+
+                    <!-- Cuadro de cantidades: botones -/+ y control de stock -->
+                    <div class="mb-2">
+                        <label for="compraCantidad" class="form-label form-label-sm mb-1">
+                            Cantidad <span id="compraStockInfo" class="text-muted fw-normal"></span>
+                        </label>
+                        <div class="input-group input-group-sm cuadro-cantidad">
+                            <button type="button" class="btn btn-outline-success" id="compraCantidadMenos"
+                                    aria-label="Quitar una unidad" title="Quitar una unidad">
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                            <input type="number" id="compraCantidad" name="cantidad" class="form-control text-center"
+                                   min="1" max="99" value="1" inputmode="numeric" aria-label="Cantidad">
+                            <button type="button" class="btn btn-outline-success" id="compraCantidadMas"
+                                    aria-label="Agregar una unidad" title="Agregar una unidad">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        <div id="compraCantidadAviso" class="form-text text-danger d-none small">
+                            <i class="bi bi-exclamation-triangle"></i> No hay suficiente stock disponible.
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label for="compraNombre" class="form-label form-label-sm mb-1">Nombre completo</label>
+                        <input type="text" id="compraNombre" name="nombre" class="form-control form-control-sm" required value="{{ current_user.nombre if current_user.is_authenticated else '' }}" placeholder="Ej: Ana Paredes">
+                    </div>
+                    <div class="mb-2">
+                        <label for="compraDireccion" class="form-label form-label-sm mb-1">Dirección de envío</label>
+                        <input type="text" id="compraDireccion" name="direccion" class="form-control form-control-sm" required placeholder="Calle, ciudad, referencia">
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-7 mb-2">
+                            <label for="compraCorreo" class="form-label form-label-sm mb-1">Correo electrónico</label>
+                            <input type="email" id="compraCorreo" name="correo" class="form-control form-control-sm" required placeholder="correo@ejemplo.com" value="{{ current_user.email if current_user.is_authenticated else '' }}">
+                        </div>
+                        <div class="col-5 mb-2">
+                            <label for="compraTelefono" class="form-label form-label-sm mb-1">Teléfono</label>
+                            <input type="tel" id="compraTelefono" name="telefono" class="form-control form-control-sm" required pattern="^\d{10}$" maxlength="10" inputmode="numeric" placeholder="0991234567">
+                        </div>
+                    </div>
+
+                    <!-- Total dinámico -->
+                    <div class="compra-total">
+                        <span><i class="bi bi-receipt"></i> Total a pagar:</span>
+                        <strong id="compraTotalTexto">$0.00</strong>
+                    </div>
+                </div>
+                <div class="modal-footer modal-compra-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success btn-compra-confirmar">
+                        <i class="bi bi-bag-check-fill"></i> Confirmar compra
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    // El script debe esperar al DOM: este include se renderiza ANTES de
+    // cargar bootstrap.bundle.min.js (base.html), y si se ejecuta de
+    // inmediato "bootstrap" aún no existe y los botones .btn-comprar
+    // quedarían sin manejador.
+    document.addEventListener("DOMContentLoaded", function () {
+    var modal = document.getElementById("modalCompraRapida");
+    if (!modal) return;
+    var bsModal = new bootstrap.Modal(modal);
+
+    var campos = {
+        producto: document.getElementById("compraProducto"),
+        origen: document.getElementById("compraOrigen"),
+        total: document.getElementById("compraTotal"),
+        totalTexto: document.getElementById("compraTotalTexto"),
+        productoTitulo: document.getElementById("compraProductoTitulo"),
+        precio: document.getElementById("compraPrecio"),
+        imagen: document.getElementById("compraImagen"),
+        cantidad: document.getElementById("compraCantidad"),
+        telefono: document.getElementById("compraTelefono")
+    };
+    var precioActual = 0;
+    var stockActual = null;
+    var avisoCantidad = document.getElementById("compraCantidadAviso");
+    var infoStock = document.getElementById("compraStockInfo");
+
+    function actualizarTotal() {
+        var cantidad = parseInt(campos.cantidad.value, 10);
+        if (!Number.isFinite(cantidad) || cantidad < 1) cantidad = 1;
+        // Limita la cantidad al stock disponible (si se conoce)
+        if (Number.isFinite(stockActual) && stockActual > 0 && cantidad > stockActual) {
+            cantidad = stockActual;
+            campos.cantidad.value = stockActual;
+            avisoCantidad.classList.remove("d-none");
+        } else {
+            avisoCantidad.classList.add("d-none");
+        }
+        var total = precioActual * cantidad;
+        campos.total.value = total.toFixed(2);
+        campos.totalTexto.textContent = "$" + total.toFixed(2);
+    }
+
+    // Botones - / + del cuadro de cantidades
+    function cambiarCantidad(delta) {
+        var cantidad = parseInt(campos.cantidad.value, 10) || 1;
+        cantidad += delta;
+        if (cantidad < 1) cantidad = 1;
+        var maximo = parseInt(campos.cantidad.max, 10);
+        if (Number.isFinite(maximo) && maximo > 0 && cantidad > maximo) cantidad = maximo;
+        campos.cantidad.value = cantidad;
+        actualizarTotal();
+    }
+    document.getElementById("compraCantidadMenos").addEventListener("click", function () { cambiarCantidad(-1); });
+    document.getElementById("compraCantidadMas").addEventListener("click", function () { cambiarCantidad(1); });
+
+    // Abre el modal desde cualquier botón .btn-comprar de la página
+    document.addEventListener("click", function (evento) {
+        var boton = evento.target.closest(".btn-comprar");
+        if (!boton) return;
+        evento.preventDefault();
+
+        // Sin sesión: se pide ingresar o registrarse antes de comprar
+        if (window.ESTA_AUTENTICADO === false) {
+            var acceso = document.getElementById("compraAccesoModal");
+            if (acceso) {
+                var productoAcceso = document.getElementById("compraAccesoProducto");
+                if (productoAcceso) productoAcceso.textContent = boton.dataset.producto;
+                new bootstrap.Modal(acceso).show();
+                return;
+            }
+            window.location.href = "{{ url_for('login') }}";
+            return;
+        }
+
+        precioActual = parseFloat(boton.dataset.precio) || 0;
+        // Limita la cantidad al stock disponible del producto
+        var stockDisponible = parseInt(boton.dataset.stock, 10);
+        if (Number.isFinite(stockDisponible) && stockDisponible > 0) {
+            campos.cantidad.max = stockDisponible;
+            stockActual = stockDisponible;
+            infoStock.textContent = "(disponibles: " + stockDisponible + ")";
+        } else {
+            campos.cantidad.removeAttribute("max");
+            stockActual = null;
+            infoStock.textContent = "";
+        }
+        campos.producto.value = boton.dataset.producto;
+        campos.origen.value = boton.dataset.origen || "inicio";
+        campos.productoTitulo.textContent = boton.dataset.producto;
+        campos.precio.textContent = "$" + precioActual.toFixed(2) + " / " + (boton.dataset.unidad || "unidad");
+        if (boton.dataset.imagen) campos.imagen.src = boton.dataset.imagen;
+        campos.cantidad.value = 1;
+        actualizarTotal();
+        bsModal.show();
+    });
+
+    campos.cantidad.addEventListener("input", actualizarTotal);
+    // Solo dígitos en el teléfono
+    campos.telefono.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 10);
+    });
+    }); // fin DOMContentLoaded
+})();
+</script>

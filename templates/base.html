@@ -6,19 +6,29 @@
     <title>{% block title %}Productos Amazónicos{% endblock %}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block head_extra %}{% endblock %}
 </head>
 <body>
     {% include "components/navbar.html" %}
 
+    {# Mensajes flash como toasts FLOTANTES: fixed arriba-centro, no ocupan
+       espacio en el flujo, así la página no se desplaza al aparecer y el
+       usuario queda donde estaba (producto comprado/agregado visible). #}
     {% with mensajes = get_flashed_messages(with_categories=true) %}
         {% if mensajes %}
-        <div class="container mt-3">
+        <div class="zona-toasts" aria-live="polite">
             {% for categoria, mensaje in mensajes %}
-            <div class="alert alert-{{ categoria }} alert-dismissible fade show" role="alert">
-                {{ mensaje }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            <div class="toast-flotante toast-{{ categoria }}">
+                <span class="toast-icono">
+                    {% if categoria == 'success' %}<i class="bi bi-check-circle-fill"></i>
+                    {% elif categoria == 'danger' %}<i class="bi bi-x-circle-fill"></i>
+                    {% elif categoria == 'warning' %}<i class="bi bi-exclamation-triangle-fill"></i>
+                    {% else %}<i class="bi bi-info-circle-fill"></i>{% endif %}
+                </span>
+                <span class="toast-texto">{{ mensaje }}</span>
+                <button type="button" class="toast-cerrar" aria-label="Cerrar">&times;</button>
             </div>
             {% endfor %}
         </div>
@@ -30,6 +40,11 @@
     </main>
 
     {% include "components/footer.html" %}
+
+    <!-- Estado de sesión disponible para todo el JS de la página -->
+    <script>window.ESTA_AUTENTICADO = {{ 'true' if current_user.is_authenticated else 'false' }};</script>
+
+    {% include "components/modal_compra.html" %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

@@ -26,13 +26,21 @@ class FormularioCliente(FlaskForm):
     )
     correo = EmailField(
         "Correo electrónico",
-        validators=[DataRequired(message="El correo es obligatorio."),
-                    Email(message="Ingrese un correo válido."),
-                    Length(max=120, message="Máximo 120 caracteres.")],
+        validators=[
+            DataRequired(message="El correo electrónico es obligatorio: no puede quedar vacío."),
+            Email(message="Correo electrónico incorrecto. Debe tener un formato válido, "
+                          "por ejemplo: nombre@dominio.com"),
+            Length(max=120, message="Máximo 120 caracteres."),
+        ],
+        render_kw={"placeholder": "Ej: cliente@correo.com", "type": "email"},
     )
     telefono = TelField(
         "Teléfono",
         validators=[Optional(),
-                    Regexp(r"^[\d\s\-\+]{7,15}$",
-                           message="Ingrese un teléfono válido (7 a 15 dígitos).")],
+                    Regexp(r"^\d{10}$",
+                           message="Ingresa solo 10 dígitos numéricos.")],
+        # maxlength evita escribir más de 10 y inputmode muestra teclado
+        # numérico en dispositivos móviles.
+        render_kw={"maxlength": "10", "inputmode": "numeric",
+                   "placeholder": "Ej: 0991234567"},
     )

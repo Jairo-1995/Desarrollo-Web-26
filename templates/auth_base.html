@@ -1,0 +1,22 @@
+{#
+Plantilla base específica para las páginas de autenticación (login y registro).
+Hereda de base.html para mantener la interfaz uniforme del sitio (navbar,
+mensajes flash, pie de página y estilos) y añade una capa visual común:
+una tarjeta centrada donde cada formulario de autenticación se muestra
+dentro del bloque "auth_content".
+#}
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow auth-card">
+                <div class="card-body p-4">
+                    {% block auth_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

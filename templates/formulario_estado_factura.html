@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% from "components/campos_formulario.html" import campo_formulario %}
+
+{% block title %}Cambiar estado de la factura {{ factura.numero }}{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <article class="formulario-producto tarjeta-formulario">
+        <header class="cabecera-formulario">
+            <span class="cabecera-formulario-icono"><i class="bi bi-cash-coin"></i></span>
+            <div>
+                <h1 class="mb-0">Estado de pago</h1>
+                <p class="mb-0">Factura {{ factura.numero }} — solo cambia el estado (Pendiente → Pagada).</p>
+            </div>
+        </header>
+
+        <!-- Resumen de solo lectura: no se puede modificar nada de esto -->
+        <div class="cuerpo-formulario">
+            <div class="row g-3 mb-2">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Cliente</label>
+                    <p class="form-control bg-light">{{ factura.cliente }}</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Fecha</label>
+                    <p class="form-control bg-light">{{ factura.fecha }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Producto</label>
+                    <p class="form-control bg-light">{{ factura.producto or '—' }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Cantidad</label>
+                    <p class="form-control bg-light">{{ cantidad }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Total</label>
+                    <p class="form-control bg-light">$ {{ '%.2f'|format(factura.total) }}</p>
+                </div>
+            </div>
+
+            <!-- Único campo editable: el estado de pago -->
+            <form method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ campo_formulario(form.estado, clase="form-select") }}
+                    </div>
+                </div>
+                <div class="acciones-formulario">
+                    <a class="btn btn-outline-secondary" href="{{ url_for('facturacion') }}"><i class="bi bi-x-lg"></i> Cancelar</a>
+                    <button class="btn btn-success btn-lg" type="submit">
+                        <i class="bi bi-check2-circle"></i> {{ form.enviar.label.text }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </article>
+</section>
+{% endblock %}

@@ -1,7 +1,7 @@
 """Formulario del módulo de facturación."""
 
 from flask_wtf import FlaskForm
-from wtforms import DateField, DecimalField, SelectField, StringField
+from wtforms import DateField, DecimalField, IntegerField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, Length, NumberRange, Optional
 
 ESTADOS = ["Pagada", "Pendiente", "Anulada"]
@@ -30,9 +30,31 @@ class FormularioFactura(FlaskForm):
         choices=[(e, e) for e in ESTADOS],
         validators=[DataRequired(message="Seleccione un estado.")],
     )
+    producto = SelectField(
+        "Producto",
+        choices=[],  # se llena con los productos de la base de datos
+        validators=[Optional()],
+    )
+    cantidad = IntegerField(
+        "Cantidad",
+        default=1,
+        validators=[Optional(),
+                    NumberRange(min=1, message="La cantidad debe ser al menos 1.")],
+    )
     total = DecimalField(
         "Total",
         places=2,
         validators=[DataRequired(message="El total es obligatorio."),
                     NumberRange(min=0, message="El total debe ser positivo.")],
     )
+
+
+class FormularioEstadoFactura(FlaskForm):
+    """Formulario para cambiar solo el estado de pago de una factura."""
+
+    estado = SelectField(
+        "Estado de pago",
+        choices=[(e, e) for e in ESTADOS],
+        validators=[DataRequired(message="Seleccione un estado.")],
+    )
+    enviar = SubmitField("Actualizar estado")

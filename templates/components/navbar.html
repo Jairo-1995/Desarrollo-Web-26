@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('inicio') }}">Productos Amazónicos</a>
+            <a class="navbar-brand" href="{% if current_user.is_authenticated %}{{ url_for('dashboard') }}{% else %}{{ url_for('inicio') }}{% endif %}">Productos Amazónicos</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú de navegación">
                 <span class="navbar-toggler-icon"></span>
@@ -9,11 +9,40 @@
 
             <div class="collapse navbar-collapse" id="menu">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('productos') }}">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('clientes') }}">Clientes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('proveedores') }}">Proveedores</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('facturacion') }}">Facturación</a></li>
+                    <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == 'inicio' }}" href="{{ url_for('inicio') }}">Inicio</a></li>
+                    {# Los enlaces a secciones solo se muestran en la página de inicio (o sin sesión) #}
+                    {% if not current_user.is_authenticated or request.endpoint == 'inicio' %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}#quienes-somos">Quiénes Somos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}#productos-disponibles">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}#producto-dinamico">Promociones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}#contenido-dinamico">Catálogo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}#contacto">Contacto</a></li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    {# Chip del usuario conectado (con icono de personita) en lugar del enlace "Administración": #}
+                    <li class="nav-item d-flex align-items-center ms-lg-2 my-2 my-lg-0">
+                        <a class="chip-usuario text-decoration-none" href="{{ url_for('dashboard') }}" title="Ir al panel de administración">
+                            <i class="bi bi-person-circle"></i>
+                            <span class="fw-semibold">{{ current_user.nombre }}</span>
+                        </a>
+                    </li>
+                    {# Opción de cierre de sesión, visible en todas las páginas: #}
+                    {# envía POST /logout con el token CSRF que exige Flask-WTF. #}
+                    <li class="nav-item d-flex align-items-center ms-lg-2 my-2 my-lg-0">
+                        <form method="post" action="{{ url_for('logout') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-light btn-sm fw-semibold border">
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="boton-ingresar" href="{{ url_for('login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Ingresar al sistema
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

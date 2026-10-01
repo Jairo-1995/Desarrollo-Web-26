@@ -3,30 +3,40 @@
 {% block title %}Productos Amazónicos{% endblock %}
 
 {% block content %}
-        <!-- INICIO -->
-        <section id="inicio" class="container p-5">
+        <!-- INICIO (HERO con imagen de la selva) -->
+        <section id="inicio" class="hero-selva text-white d-flex align-items-center justify-content-center text-center">
+            <img src="{{ url_for('static', filename='img/selva.jpg') }}" class="hero-fondo" alt="Selva amazónica" fetchpriority="high">
+            <article class="hero-contenido px-3">
+                <h1 class="display-3 fw-bold">Venta de Productos Amazónicos</h1>
+
+                <p class="lead">{{ mensaje_bienvenida }}</p>
+
+                <p class="hero-descripcion mx-auto">
+                    Bienvenidos a nuestro proyecto dedicado a la difusión y comercialización de productos amazónicos. Esta plataforma está diseñada para ofrecer una experiencia de compra confiable y atractiva, donde los visitantes puedan conocer la diversidad de la Amazonía y acceder a artículos auténticos elaborados por productores locales. Nuestro enfoque está en la sostenibilidad, la identidad cultural y el apoyo al emprendedor regional.
+                </p>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('productos') }}" class="btn btn-success btn-lg m-2 shadow">
+                        Ver Productos
+                    </a>
+                    <a href="#contacto" class="btn btn-outline-light btn-lg m-2 shadow">
+                        Contactar
+                    </a>
+                </div>
+            </article>
+        </section>
+
+        <!-- CONTINUACIÓN DE INICIO -->
+        <section class="container p-5">
             <article>
-                <h1 class="display-4 text-center">Venta de Productos Amazónicos</h1>
-
-                <p class="lead text-center">{{ mensaje_bienvenida }}</p>
-
                 <p class="text-justify">
-                    Bienvenidos a nuestro proyecto dedicado a la difusión y comercialización de productos amazónicos. Esta plataforma está diseñada para ofrecer una experiencia de compra confiable y atractiva, donde los visitantes puedan conocer la diversidad de la Amazonía y acceder a artículos auténticos elaborados por productores locales. Nuestro enfoque está en la sostenibilidad, la identidad cultural y el apoyo al emprendedor regional. Navega por nuestras secciones para descubrir más sobre nosotros, nuestros productos y cómo contactarnos.
+                    Navega por nuestras secciones para descubrir más sobre nosotros, nuestros productos y cómo contactarnos.
                 </p>
 
                 <div id="galeria-inicio" class="row g-3 my-4 galeria-inicio" aria-label="Galería de productos amazónicos"></div>
 
                 <div class="ratio ratio-16x9 video-amazonico mb-4">
                     <iframe src="https://www.youtube.com/embed/X6LcHAk-9nc?si=AkeOYSy_z0asT15D" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="rounded shadow" loading="lazy"></iframe>
-                </div>
-                <div class="text-center">
-                    <a href="{{ url_for('productos') }}" class="btn btn-success btn-lg m-2">
-                        Ver Productos
-                    </a>
-    
-                    <a href="#contacto" class="btn btn-outline-success btn-lg m-2">
-                        Contactar
-                    </a>
                 </div>
             </article>
         </section>
@@ -40,7 +50,7 @@
                 <div class="row align-items-center">
 
                     <div class="col-md-6">
-                        <p>
+                        <p class="parrafo-justificado">
                         Somos apasionados por conectar la riqueza de la Amazonía ecuatoriana con tu hogar. Nacimos con el propósito de valorar y difundir los tesoros naturales y artesanales de nuestras comunidades indígenas. Cada producto que ofrecemos, productos 100% naturales como:yuca, platano, mani, caña, uva, y muchas cosas mas hasta artesanías únicas, es seleccionado bajo principios de comercio justo y sostenibilidad.Creemos en un consumo consciente que respeta la selva y apoya el desarrollo de las familias amazónicas. Al elegirnos, no solo adquieres un producto de calidad excepcional, sino que te conviertes en guardián de nuestra biodiversidad y nuestras tradiciones ancestrales.
                         </p>
                     </div>
@@ -63,7 +73,14 @@
                             <h3 class="h5 card-title">Caña</h3>
                             <p class="card-text">Caña fresca de la Amazonía, ideal para bebidas tradicionales y dulces.</p>
                             <p class="fw-bold text-success">$1.00 / unidad</p>
-                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                            {% set disponible = stocks.get('Caña') %}
+                            <div class="text-center mb-2">
+                                <span class="badge {{ 'bg-success' if disponible else 'bg-danger' }} stock-inicio">{% if disponible %}Disponibles: {{ disponible }}{% else %}Agotado{% endif %}</span>
+                            </div>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a href="{{ url_for('productos') }}" class="btn btn-outline-success flex-fill btn-accion-tarjeta"><i class="bi bi-info-circle"></i> Info</a>
+                                {% if not current_user.es_admin %}<button type="button" class="btn btn-success flex-fill btn-accion-tarjeta btn-comprar" data-producto="Caña" data-precio="1.00" data-unidad="unidad" data-origen="inicio" data-imagen="{{ url_for('static', filename='img/caña.jpg') }}"><i class="bi bi-cart-plus"></i> Comprar</button>{% endif %}
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -74,7 +91,14 @@
                             <h3 class="h5 card-title">Morete</h3>
                             <p class="card-text">Fruto amazónico tradicional para usos culinarios y medicinales.</p>
                             <p class="fw-bold text-success">$3.00 / kilogramo</p>
-                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                            {% set disponible = stocks.get('Morete') %}
+                            <div class="text-center mb-2">
+                                <span class="badge {{ 'bg-success' if disponible else 'bg-danger' }} stock-inicio">{% if disponible %}Disponibles: {{ disponible }}{% else %}Agotado{% endif %}</span>
+                            </div>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a href="{{ url_for('productos') }}" class="btn btn-outline-success flex-fill btn-accion-tarjeta"><i class="bi bi-info-circle"></i> Info</a>
+                                {% if not current_user.es_admin %}<button type="button" class="btn btn-success flex-fill btn-accion-tarjeta btn-comprar" data-producto="Morete" data-precio="3.00" data-unidad="kilogramo" data-origen="inicio" data-imagen="{{ url_for('static', filename='img/morete.jpg') }}"><i class="bi bi-cart-plus"></i> Comprar</button>{% endif %}
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -85,7 +109,14 @@
                             <h3 class="h5 card-title">Ungurahua</h3>
                             <p class="card-text">Fruto usado tradicionalmente en preparados de cuidado personal.</p>
                             <p class="fw-bold text-success">$3.50 / kilogramo</p>
-                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                            {% set disponible = stocks.get('Ungurahua') %}
+                            <div class="text-center mb-2">
+                                <span class="badge {{ 'bg-success' if disponible else 'bg-danger' }} stock-inicio">{% if disponible %}Disponibles: {{ disponible }}{% else %}Agotado{% endif %}</span>
+                            </div>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a href="{{ url_for('productos') }}" class="btn btn-outline-success flex-fill btn-accion-tarjeta"><i class="bi bi-info-circle"></i> Info</a>
+                                {% if not current_user.es_admin %}<button type="button" class="btn btn-success flex-fill btn-accion-tarjeta btn-comprar" data-producto="Ungurahua" data-precio="3.50" data-unidad="kilogramo" data-origen="inicio" data-imagen="{{ url_for('static', filename='img/ungurahua.jpg') }}"><i class="bi bi-cart-plus"></i> Comprar</button>{% endif %}
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -96,7 +127,14 @@
                             <h3 class="h5 card-title">Miel Amazónica</h3>
                             <p class="card-text">Miel pura y orgánica recolectada de colmenas silvestres.</p>
                             <p class="fw-bold text-success">$5.00 / frasco</p>
-                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                            {% set disponible = stocks.get('Miel Amazónica') %}
+                            <div class="text-center mb-2">
+                                <span class="badge {{ 'bg-success' if disponible else 'bg-danger' }} stock-inicio">{% if disponible %}Disponibles: {{ disponible }}{% else %}Agotado{% endif %}</span>
+                            </div>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a href="{{ url_for('productos') }}" class="btn btn-outline-success flex-fill btn-accion-tarjeta"><i class="bi bi-info-circle"></i> Info</a>
+                                {% if not current_user.es_admin %}<button type="button" class="btn btn-success flex-fill btn-accion-tarjeta btn-comprar" data-producto="Miel Amazónica" data-precio="5.00" data-unidad="frasco" data-origen="inicio" data-imagen="{{ url_for('static', filename='img/miel.jpg') }}"><i class="bi bi-cart-plus"></i> Comprar</button>{% endif %}
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -107,7 +145,14 @@
                             <h3 class="h5 card-title">Yuca Fresca</h3>
                             <p class="card-text">Tubérculo amazónico nutritivo y versátil para tus comidas.</p>
                             <p class="fw-bold text-success">$5.00 / kg</p>
-                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                            {% set disponible = stocks.get('Yuca Fresca') %}
+                            <div class="text-center mb-2">
+                                <span class="badge {{ 'bg-success' if disponible else 'bg-danger' }} stock-inicio">{% if disponible %}Disponibles: {{ disponible }}{% else %}Agotado{% endif %}</span>
+                            </div>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a href="{{ url_for('productos') }}" class="btn btn-outline-success flex-fill btn-accion-tarjeta"><i class="bi bi-info-circle"></i> Info</a>
+                                {% if not current_user.es_admin %}<button type="button" class="btn btn-success flex-fill btn-accion-tarjeta btn-comprar" data-producto="Yuca Fresca" data-precio="5.00" data-unidad="kg" data-origen="inicio" data-imagen="{{ url_for('static', filename='img/yuca.jpg') }}"><i class="bi bi-cart-plus"></i> Comprar</button>{% endif %}
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -118,7 +163,14 @@
                             <h3 class="h5 card-title">Plátanos Amazónicos</h3>
                             <p class="card-text">Plátanos frescos y naturales cultivados en nuestros campos.</p>
                             <p class="fw-bold text-success">$6.00 / racimo</p>
-                            <a href="{{ url_for('productos') }}" class="btn btn-outline-success mt-auto">Más información</a>
+                            {% set disponible = stocks.get('Plátanos Amazónicos') %}
+                            <div class="text-center mb-2">
+                                <span class="badge {{ 'bg-success' if disponible else 'bg-danger' }} stock-inicio">{% if disponible %}Disponibles: {{ disponible }}{% else %}Agotado{% endif %}</span>
+                            </div>
+                            <div class="d-flex gap-2 mt-auto">
+                                <a href="{{ url_for('productos') }}" class="btn btn-outline-success flex-fill btn-accion-tarjeta"><i class="bi bi-info-circle"></i> Info</a>
+                                {% if not current_user.es_admin %}<button type="button" class="btn btn-success flex-fill btn-accion-tarjeta btn-comprar" data-producto="Plátanos Amazónicos" data-precio="6.00" data-unidad="racimo" data-origen="inicio" data-imagen="{{ url_for('static', filename='img/platanos.jpg') }}"><i class="bi bi-cart-plus"></i> Comprar</button>{% endif %}
+                            </div>
                         </div>
                     </article>
                 </div>
@@ -182,6 +234,7 @@
                 <h2 class="text-center mb-4">Registro de Producto</h2>
 
                 <form id="formulario-producto" novalidate>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="mb-3">
                         <label for="nombre-producto" class="form-label">Nombre del producto</label>
                         <input type="text" id="nombre-producto" class="form-control" placeholder="Ejemplo: Miel amazonica" minlength="3" maxlength="40" required aria-describedby="ayuda-nombre error-nombre exito-nombre">
@@ -209,6 +262,19 @@
                         </select>
                         <div id="error-categoria" class="invalid-feedback"></div>
                         <div id="exito-categoria" class="valid-feedback"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="proveedor-producto" class="form-label">Proveedor</label>
+                        <select id="proveedor-producto" class="form-select" aria-describedby="ayuda-proveedor">
+                            <option value="">Sin proveedor (opcional)</option>
+                            {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.nombre }}" data-producto="{{ proveedor.producto_principal }}" data-ciudad="{{ proveedor.ciudad }}">
+                                {{ proveedor.nombre }}{% if proveedor.producto_principal %} — {{ proveedor.producto_principal }}{% endif %}{% if proveedor.ciudad %} ({{ proveedor.ciudad }}){% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div id="ayuda-proveedor" class="form-text">Quién suministra este producto (opcional).</div>
                     </div>
 
                     <button type="submit" id="boton-registrar" class="btn btn-success">
@@ -423,14 +489,26 @@
                         </div>
                         <div class="col-md-7">
                             <p class="fw-bold">Tus datos para el envío:</p>
-                            <form id="checkoutForm">
+                            <form id="checkoutForm" method="post" action="{{ url_for('comprar') }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="producto" id="checkoutProductoNombre">
+                                <input type="hidden" name="total" id="checkoutProductoTotal">
                                 <div class="mb-3">
                                     <label for="checkoutName" class="form-label">Nombre Completo</label>
-                                    <input type="text" class="form-control" id="checkoutName" required>
+                                    <input type="text" class="form-control" id="checkoutName" name="nombre" required value="{{ current_user.nombre if current_user.is_authenticated else '' }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="checkoutAddress" class="form-label">Dirección de Envío</label>
-                                    <input type="text" class="form-control" id="checkoutAddress" required>
+                                    <input type="text" class="form-control" id="checkoutAddress" name="direccion" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="checkoutCorreo" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="checkoutCorreo" name="correo" placeholder="correo@ejemplo.com" required value="{{ current_user.email if current_user.is_authenticated else '' }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="checkoutTelefono" class="form-label">Número de Teléfono</label>
+                                    <input type="tel" class="form-control" id="checkoutTelefono" name="telefono" placeholder="Ej: 0991234567" pattern="^\d{10}$" maxlength="10" inputmode="numeric" required>
+                                    <div class="form-text">Ingresa solo 10 dígitos numéricos.</div>
                                 </div>
                             </form>
                         </div>
@@ -444,4 +522,25 @@
         </div>
     </div>
 
-{% endblock %}
+    <!-- Ventana flotante: pedir ingresar o registrarse antes de comprar -->
+    <div class="modal fade" id="compraAccesoModal" tabindex="-1" aria-labelledby="compraAccesoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="compraAccesoModalLabel">Para continuar con tu compra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="mb-1">Para comprar <strong id="compraAccesoProducto"></strong> necesitas una cuenta.</p>
+                    <p class="text-muted mb-0">Ingresa con tu cuenta o regístrate gratuitamente.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <a href="{{ url_for('login') }}" class="btn btn-success px-4">Ingresar</a>
+                    <a href="{{ url_for('registro') }}" class="btn btn-warning px-4">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- El estado de sesión (ESTA_AUTENTICADO) se define en base.html -->
+    {% endblock %}

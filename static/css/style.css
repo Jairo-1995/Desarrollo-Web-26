@@ -1,21 +1,28 @@
 :root{
     --selva-profunda:#0b3d2e;
+    --selva-media:#14513c;
     --verde-amazonia:#12805c;
-    --verde-hoja:#28a745; /* Verde más brillante */
+    --verde-hoja:#2fa466;
+    --verde-suave:#e6f4ec;
     --rio-amazonico:#0f8b8d;
     --sol-tropical:#f4b942;
     --fruta-amazonica:#e85d3f;
-    --fondo-selva:#e8f7e7;
+    --fondo:#f4f7f4;
+    --blanco:#ffffff;
     --blanco-calido:#fdfdfa;
-    --texto-principal:#212529;
-    --texto-secundario: #6c757d;
-    --tierra-humeda: #5c4742; /* Marrón tierra */
+    --texto-principal:#22302a;
+    --texto-secundario:#69766f;
+    --tierra-humeda:#5c4742;
+    --borde:#e3e9e4;
+    --sombra-suave:0 6px 18px rgba(11,61,46,.08);
+    --sombra-hover:0 14px 30px rgba(11,61,46,.14);
+    --radio:14px;
 }
 
 body{
-    background-color: var(--fondo-selva);
+    background-color: var(--fondo);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align:justify;
+    text-align:left;
     color:var(--texto-principal);
 }
 
@@ -322,4 +329,1577 @@ aside{
     .mapa-amazonico iframe{
         height:280px;
     }
+}/* ==========================================================================
+   CAPA DE MODERNIZACIÓN — se aplica al final para sobrescribir estilos base.
+   Tipografía, navbar, tarjetas, tablas, formularios, alertas, dashboard.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+body{
+    background-color:var(--fondo);
+    font-family:'Inter','Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    font-size:1rem;
+    color:var(--texto-principal);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4{ color:var(--selva-profunda); font-weight:700; text-align:left; letter-spacing:normal; }
+h1,h2{ font-family:'Playfair Display','Inter','Segoe UI',serif; }
+/* Títulos fluidos: un poco más grandes pero siempre proporcionados */
+h1{ font-size:clamp(1.4rem,1.1rem + 1.5vw,1.9rem); line-height:1.3; }
+h2{ font-size:clamp(1.2rem,1rem + 1vw,1.6rem); line-height:1.35; }
+h3{ font-size:clamp(1.05rem,.95rem + .6vw,1.3rem); line-height:1.4; }
+h4{ font-size:clamp(1rem,.95rem + .4vw,1.2rem); }
+.display-4{ font-size:clamp(1.6rem,1.2rem + 1.8vw,2.3rem); }
+.lead{ font-size:1.12rem; }
+.card-title{ font-size:1.12rem; }
+.card-text,.card-body p{ font-size:.97rem; }
+/* Texto justificado estira los espacios y "deforma" las líneas: alineación natural */
+p{ text-align:left; }
+.text-center, .text-center p{ text-align:center; }
+
+/* ---------- Navbar ---------- */
+.bg-success{
+    background:linear-gradient(100deg,var(--selva-profunda) 0%,var(--selva-media) 60%,var(--verde-amazonia) 130%) !important;
+    box-shadow:0 2px 12px rgba(11,61,46,.25);
+    position:sticky;
+    top:0;
+    z-index:1020;
+}
+.navbar{ padding:.65rem 0; }
+.navbar-brand{
+    color:var(--sol-tropical) !important;
+    font-weight:800;
+    font-size:1.2rem;
+}
+.navbar-dark .navbar-nav .nav-link{
+    color:rgba(255,255,255,.82);
+    font-weight:500;
+    font-size:.95rem;
+    padding:.42rem .7rem;
+    border-radius:999px;
+    transition:color .2s ease,background .2s ease;
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active{
+    color:#fff;
+    background:rgba(255,255,255,.14);
+}
+.navbar-text{ font-size:.9rem; }
+
+/* ---------- Tarjetas ---------- */
+.card{
+    border:1px solid var(--borde);
+    border-top:4px solid var(--verde-hoja);
+    border-radius:var(--radio);
+    background:var(--blanco);
+    box-shadow:var(--sombra-suave);
+    transition:transform .25s ease,box-shadow .25s ease;
+    overflow:hidden;
+    height:100%;
+}
+.card:hover{ transform:translateY(-4px); box-shadow:var(--sombra-hover); }
+.card-title{ color:var(--selva-profunda); }
+.card-body{ display:flex; flex-direction:column; gap:.5rem; }
+.card .btn{ margin-top:auto; }
+.card-img-top{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+    transition:transform .4s ease;
+}
+.card:hover .card-img-top{ transform:scale(1.04); }
+
+#inicio{
+    background:var(--blanco);
+    border-radius:18px;
+    margin-top:1.5rem;
+    margin-bottom:1.5rem;
+    border:1px solid var(--borde);
+    box-shadow:var(--sombra-suave);
+}
+
+.oferta-dinamica,
+.formulario-producto{
+    background:var(--blanco);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    box-shadow:var(--sombra-suave);
+    padding:30px;
+    text-align:left;
+}
+.formulario-producto{ border-top:4px solid var(--sol-tropical); }
+.formulario-producto{ max-width:760px; margin:0 auto; }
+
+.imagen-dinamica{
+    border-radius:var(--radio);
+    box-shadow:var(--sombra-suave);
+}
+
+.video-amazonico{
+    border-radius:var(--radio);
+    overflow:hidden;
+    box-shadow:var(--sombra-suave);
+}
+
+.imagen-quienes{
+    width:100%;
+    border-radius:var(--radio);
+    box-shadow:var(--sombra-suave);
+}
+
+.mapa-amazonico iframe{ border-radius:var(--radio); }
+
+/* ---------- Footer ---------- */
+footer{
+    margin-top:2.5rem;
+    padding:34px 0 26px;
+    background:linear-gradient(100deg,var(--selva-profunda),var(--selva-media)) !important;
+    border-top:5px solid var(--sol-tropical);
+    color:rgba(255,255,255,.85);
+}
+footer p{ text-align:center; }
+
+/* ---------- Botones ---------- */
+.btn{
+    border-radius:999px;
+    font-weight:600;
+    padding:.5rem 1.15rem;
+}
+.btn-success{
+    background-color:var(--verde-hoja);
+    border-color:var(--verde-hoja);
+    color:#fff;
+    box-shadow:0 3px 10px rgba(47,164,102,.35);
+}
+.btn-success:hover{
+    background-color:var(--verde-amazonia);
+    border-color:var(--verde-amazonia);
+    color:#fff;
+    transform:translateY(-2px);
+    box-shadow:0 6px 16px rgba(18,128,92,.4);
+}
+.btn-outline-success:hover,
+.btn-outline-success.activo{
+    background:var(--verde-hoja);
+    border-color:var(--verde-hoja);
+    color:#fff;
+    transform:translateY(-2px);
+}
+.btn-outline-secondary:hover{
+    background:#f0f3f0;
+    border-color:#b9c2bb;
+    color:var(--texto-principal);
+}
+.btn-warning:hover{
+    background:#e6ab33;
+    border-color:#e6ab33;
+    color:var(--selva-profunda);
+    transform:translateY(-2px);
+}
+.btn-danger:hover{ background:#c74642; border-color:#c74642; transform:translateY(-2px); }
+.btn-sm{ padding:.3rem .8rem; font-size:.85rem; }
+
+/* ---------- Botones de acción en tarjetas de productos (inicio) ---------- */
+/* "Comprar" y "Más información" compactos, mismos tamaños y centrados */
+.btn-accion-tarjeta{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.35rem;
+    min-height:36px;
+    padding:.3rem .7rem;
+    font-weight:600;
+    font-size:.82rem;
+    line-height:1.2;
+    transition:transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.btn-accion-tarjeta .bi{
+    font-size:.95rem;
+}
+/* En las tarjetas del inicio los dos botones comparten el ancho a partes iguales */
+#productos-disponibles .d-flex.gap-2 .btn-accion-tarjeta{
+    padding-left:.45rem;
+    padding-right:.45rem;
+    font-size:.8rem;
+}
+.btn-accion-tarjeta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px rgba(11,61,46,.18);
+}
+.btn-accion-tarjeta:active{
+    transform:translateY(0);
+    box-shadow:none;
+}
+
+/* En pantallas angostas los botones se apilan uno debajo del otro */
+@media (max-width:575.98px){
+    .btn-accion-tarjeta{
+        min-height:34px;
+        font-size:.75rem;
+        padding:.25rem .55rem;
+    }
+}
+
+/* ---------- Ventana flotante de compra (muy compacta y llamativa) ---------- */
+/* Cuadro angosto: el diálogo se limita a 300px aunque use modal-sm */
+#modalCompraRapida .modal-dialog{
+    max-width:300px;
+}
+.modal-compra{
+    border:2px solid var(--verde-hoja);
+    border-radius:var(--radio);
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(11,61,46,.35);
+    font-size:.78rem;
+}
+.modal-compra .modal-body{
+    padding:.7rem .75rem;
+}
+.modal-compra .modal-body .form-label{
+    font-size:.62rem;
+    font-weight:600;
+    margin-bottom:.1rem;
+    color:var(--selva-media);
+    text-transform:uppercase;
+    letter-spacing:.02em;
+}
+.modal-compra .modal-body .mb-2{
+    margin-bottom:.35rem !important;
+}
+.modal-compra .modal-body .form-control-sm{
+    font-size:.7rem;
+    padding:.2rem .45rem;
+}
+.modal-compra-header{
+    background:linear-gradient(135deg, var(--selva-profunda), var(--verde-amazonia));
+    color:var(--blanco);
+    padding:.55rem .8rem;
+}
+.modal-compra-header .modal-title{
+    color:var(--blanco);
+    font-weight:700;
+    font-size:.85rem;
+    display:flex;
+    align-items:center;
+    gap:.35rem;
+}
+.modal-compra-header .modal-title .bi{
+    color:var(--sol-tropical);
+    font-size:1rem;
+}
+/* Resumen del producto dentro del modal */
+.compra-resumen{
+    display:flex;
+    align-items:center;
+    gap:.55rem;
+    background:var(--verde-suave);
+    border:1px solid var(--borde);
+    border-radius:8px;
+    padding:.4rem .55rem;
+    margin-bottom:.45rem;
+}
+.compra-resumen-img{
+    width:42px;
+    height:42px;
+    object-fit:cover;
+    border-radius:7px;
+    box-shadow:var(--sombra-suave);
+}
+.compra-producto-nombre{
+    display:block;
+    color:var(--selva-profunda);
+    font-weight:700;
+    font-size:.78rem;
+    line-height:1.2;
+}
+.compra-resumen-datos p{
+    color:var(--verde-amazonia);
+    font-size:.72rem;
+}
+/* Cuadro de cantidades (- / número / +) de la ventana de compra */
+.cuadro-cantidad{
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.cuadro-cantidad .btn{
+    color:var(--verde-amazonia);
+    border-color:var(--verde-hoja);
+    background:var(--verde-suave);
+}
+.cuadro-cantidad .btn:hover{
+    background:var(--verde-amazonia);
+    color:var(--blanco);
+}
+.cuadro-cantidad .form-control{
+    font-weight:700;
+    max-width:70px;
+    border-color:var(--verde-hoja);
+}
+.cuadro-cantidad .form-control:focus{
+    box-shadow:0 0 0 .2rem rgba(46,125,50,.18);
+    border-color:var(--verde-amazonia);
+}
+.compra-instruccion{
+    color:var(--texto-secundario);
+    font-weight:600;
+    font-size:.68rem;
+}
+.compra-total{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:linear-gradient(135deg, var(--selva-profunda), var(--verde-amazonia));
+    color:var(--blanco);
+    border-radius:8px;
+    padding:.4rem .6rem;
+    font-size:.72rem;
+    margin-top:.3rem;
+}
+.compra-total strong{
+    color:var(--sol-tropical);
+    font-size:.95rem;
+}
+.modal-compra-footer{
+    padding:.45rem .75rem;
+    border-top:1px solid var(--borde);
+}
+/* Botón confirmar con animación que llama la atención */
+.btn-compra-confirmar{
+    font-size:.72rem;
+    padding:.25rem .7rem;
+    animation:pulso-compra 1.8s ease-in-out infinite;
+}
+@keyframes pulso-compra{
+    0%, 100%{ transform:scale(1); box-shadow:0 0 0 0 rgba(47,164,102,.5); }
+    50%{ transform:scale(1.05); box-shadow:0 0 0 8px rgba(47,164,102,0); }
+}
+.btn-compra-confirmar:hover{
+    animation:none;
+    transform:translateY(-2px);
+}
+
+/* ---------- Formularios ---------- */
+.form-control,.form-select{
+    border-radius:10px;
+    border:1px solid var(--borde);
+    padding:.6rem .9rem;
+    transition:border-color .2s ease,box-shadow .2s ease;
+    background-color:#fbfcfb;
+}
+.form-control:focus,.form-select:focus{
+    border-color:var(--verde-hoja);
+    box-shadow:0 0 0 .2rem rgba(47,164,102,.18);
+    background:#fff;
+}
+.form-label{ font-weight:600; color:var(--selva-media); margin-bottom:.35rem; }
+
+/* ---------- Contenedor de módulos ---------- */
+.page-shell{
+    background:var(--blanco);
+    border:1px solid var(--borde);
+    border-radius:16px;
+    box-shadow:var(--sombra-suave);
+    padding:1.75rem 1.75rem 1.5rem;
+    margin-top:1.75rem;
+}
+.page-header{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    border-bottom:1px solid var(--borde);
+    padding-bottom:1rem;
+    margin-bottom:1.25rem;
+}
+.page-header h1{ margin:0; font-size:1.6rem; }
+.page-header p{ margin:0; color:var(--texto-secundario); }
+
+/* ---------- Tablas ---------- */
+.table{
+    border-collapse:separate;
+    border-spacing:0;
+    margin-bottom:0;
+    font-size:.95rem;
+}
+.table thead th{
+    background:var(--selva-profunda) !important;
+    color:#fff;
+    font-weight:600;
+    font-size:.83rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    border-bottom:0;
+    white-space:nowrap;
+    padding:.8rem .9rem;
+}
+.table thead th:first-child{ border-top-left-radius:12px; }
+.table thead th:last-child{ border-top-right-radius:12px; }
+.table tbody td{
+    border-color:var(--borde);
+    vertical-align:middle;
+    padding:.75rem .9rem;
+    background:#fff;
+}
+
+/* La tabla de productos tiene 9 columnas: más compacta para que no se corte */.table tbody tr:last-child td:first-child{ border-bottom-left-radius:12px; }
+.table tbody tr:last-child td:last-child{ border-bottom-right-radius:12px; }
+.table-striped>tbody>tr:nth-of-type(odd)>*{ background-color:#f7faf7; --bs-table-accent-bg:#f7faf7; }
+.table-hover>tbody>tr:hover>*{ background-color:#e9f4ec; --bs-table-accent-bg:#e9f4ec; }
+.table-responsive{
+    border:1px solid var(--borde);
+    border-radius:14px;
+    background:#fff;
+    box-shadow:var(--sombra-suave);
+}
+
+/* Tabla de productos: ajustada al 100 % del ancho, sin barra de
+   desplazamiento horizontal. Las columnas reparten el espacio y el
+   texto largo (descripción, proveedor) se ajusta en varias líneas. */
+.tabla-contenedor{
+    border:1px solid var(--borde);
+    border-radius:14px;
+    background:#fff;
+    box-shadow:var(--sombra-suave);
+    overflow:hidden;
+    max-width:100%;
+}
+.tabla-productos{
+    width:100%;
+    table-layout:fixed;
+    font-size:.78rem;
+    line-height:1.35;
+}
+.tabla-productos thead th{
+    white-space:normal;
+    padding:.55rem .35rem;
+    text-align:center;
+    font-size:.72rem;
+}
+.tabla-productos tbody td{
+    padding:.45rem .4rem;
+    white-space:normal;     /* el texto puede ocupar varias líneas */
+    word-break:normal;      /* corta entre palabras, no dentro de la palabra */
+    overflow-wrap:break-word;
+    hyphens:auto;
+    text-align:center;
+}
+/* Badge de categoría: texto pequeño que se ajusta dentro de la celda */
+.tabla-productos td[data-label="Categoría"] .badge{
+    font-size:.65rem;
+    padding:.25em .5em;
+    white-space:normal;         /* puede partirse en dos líneas */
+    overflow-wrap:break-word;
+    display:inline-block;
+    max-width:100%;
+    hyphens:auto;
+}
+/* Miniatura de imagen compacta dentro de su columna fija */
+.tabla-productos tbody td img{
+    width:56px;
+    height:42px;
+    object-fit:cover;
+    max-width:100%;
+}
+.tabla-productos tbody td[data-label="ID"]{ font-size:.72rem; }
+.tabla-productos td[data-label="Descripción"]{ text-align:left; font-size:.75rem; }
+.tabla-productos td[data-label="Proveedor"]{ font-size:.75rem; }
+/* Botones compactos para que quepan en la columna de acciones */
+.tabla-productos td[data-label="Acciones"] .d-flex{
+    justify-content:center;
+    gap:.25rem;
+}
+.tabla-productos td[data-label="Acciones"] .btn{
+    font-size:.68rem;
+    padding:.2rem .4rem;
+    white-space:nowrap;
+}
+.tabla-productos td[data-label="Acciones"] .btn i{
+    margin:0;
+}
+/* Ancho relativo de cada una de las 10 columnas (suma 100 %) */
+.tabla-productos thead th:nth-child(1),
+.tabla-productos tbody td:nth-child(1){ width:6%; }   /* ID */
+.tabla-productos thead th:nth-child(2),
+.tabla-productos tbody td:nth-child(2){ width:7%; }   /* Imagen */
+.tabla-productos thead th:nth-child(3),
+.tabla-productos tbody td:nth-child(3){ width:11%; }  /* Nombre */
+.tabla-productos thead th:nth-child(4),
+.tabla-productos tbody td:nth-child(4){ width:10%; }  /* Categoría */
+.tabla-productos thead th:nth-child(5),
+.tabla-productos tbody td:nth-child(5){ width:19%; }  /* Descripción */
+.tabla-productos thead th:nth-child(6),
+.tabla-productos tbody td:nth-child(6){ width:7%; }   /* Precio */
+.tabla-productos thead th:nth-child(7),
+.tabla-productos tbody td:nth-child(7){ width:8%; }   /* Unidad */
+.tabla-productos thead th:nth-child(8),
+.tabla-productos tbody td:nth-child(8){ width:9%; }   /* Stock */
+.tabla-productos thead th:nth-child(9),
+.tabla-productos tbody td:nth-child(9){ width:12%; }  /* Proveedor */
+.tabla-productos thead th:nth-child(10),
+.tabla-productos tbody td:nth-child(10){ width:11%; } /* Acciones */
+.badge{ border-radius:999px; font-weight:600; padding:.4em .75em; }
+
+/* ---------- Alertas ---------- */
+.alert{
+    border-radius:12px;
+    border-width:0;
+    border-left:5px solid transparent;
+    box-shadow:var(--sombra-suave);
+    font-weight:500;
+    animation:alerta-entra .35s ease;
+}
+@keyframes alerta-entra{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+.alert-success{ background:#e4f5ea; border-left-color:var(--verde-hoja); color:#14502f; }
+.alert-danger{ background:#fdeae6; border-left-color:var(--fruta-amazonica); color:#7a2417; }
+.alert-warning{ background:#fdf5e2; border-left-color:var(--sol-tropical); color:#7a5a12; }
+.alert-info{ background:#e2f2f2; border-left-color:var(--rio-amazonico); color:#0b5d5e; }
+
+/* ---------- Login / Registro ---------- */
+.auth-card{
+    border:0;
+    border-radius:18px;
+    box-shadow:var(--sombra-hover);
+    overflow:hidden;
+}
+.auth-card::before{
+    content:"";
+    display:block;
+    height:6px;
+    background:linear-gradient(90deg,var(--selva-profunda),var(--verde-hoja),var(--sol-tropical));
+}
+.auth-card .card-body{ padding:2rem 1.75rem; }
+.auth-card a{ color:var(--verde-amazonia); font-weight:600; }
+.auth-card a:hover{ color:var(--selva-profunda); }
+
+/* ---------- Dashboard ---------- */
+.stat-card{
+    border:1px solid var(--borde);
+    border-radius:16px;
+    background:var(--blanco);
+    box-shadow:var(--sombra-suave);
+    padding:1.4rem 1.25rem;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    transition:transform .25s ease,box-shadow .25s ease;
+    height:100%;
+}
+.stat-card::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto 0;
+    height:5px;
+    background:var(--verde-hoja);
+}
+.stat-card:nth-child(1)::before{ background:var(--verde-hoja); }
+.stat-card:nth-child(2)::before{ background:var(--sol-tropical); }
+.stat-card:nth-child(3)::before{ background:var(--rio-amazonico); }
+.stat-card:nth-child(4)::before{ background:var(--fruta-amazonica); }
+.stat-card .stat-num{
+    font-size:2.3rem;
+    font-weight:800;
+    color:var(--selva-profunda);
+    line-height:1.1;
+    margin-bottom:.15rem;
+}
+.stat-card .stat-label{
+    color:var(--texto-secundario);
+    font-weight:600;
+    text-transform:capitalize;
+    margin-bottom:0;
+    font-size:.95rem;
+}
+.stat-card:hover{ transform:translateY(-4px); box-shadow:var(--sombra-hover); }
+
+.dashboard-link{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.35rem;
+    padding:1.1rem .75rem;
+    border-radius:14px;
+    text-decoration:none;
+    background:var(--blanco);
+    border:1px solid var(--borde);
+    box-shadow:var(--sombra-suave);
+    font-weight:600;
+    color:var(--selva-media);
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.dashboard-link:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--sombra-hover);
+    border-color:var(--verde-hoja);
+    color:var(--verde-amazonia);
+}
+.dashboard-link .dash-icon{ font-size:1.5rem; line-height:1; }
+
+/* ---------- Hero de inicio con imagen de la selva ---------- */
+.hero-selva{
+    position:relative;
+    min-height:88vh;
+    overflow:hidden;
+    background-color:var(--selva-profunda);
+}
+.hero-fondo{
+    /* La imagen de la selva como fondo del hero: cubre toda la sección,
+       se recorta con object-fit y queda fija detrás del contenido */
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    z-index:0;
+}
+.hero-selva::before{
+    /* Capa oscura translúcida para que el texto se lea con claridad */
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.55) 0%,
+        rgba(0,0,0,.35) 50%,
+        rgba(0,0,0,.65) 100%
+    );
+    z-index:1;
+}
+.hero-contenido{
+    position:relative;
+    z-index:2;
+    max-width:60rem;
+    animation:aparecer .6s ease both;
+}
+.hero-contenido .hero-descripcion{
+    font-size:1.05rem;
+    max-width:none;
+    width:100%;
+    text-align:center;
+    text-shadow:0 1px 3px rgba(0,0,0,.7);
+}
+.hero-contenido h1,
+.hero-contenido .lead{
+    text-shadow:0 2px 6px rgba(0,0,0,.75);
+}
+@media (max-width:768px){
+    .hero-selva{ min-height:70vh; }
+    .hero-contenido h1{ font-size:2rem; }
+}
+
+/* El título del hero debe resaltar sobre la imagen: color dorado sólido
+   con sombra fuerte (la regla #inicio con fondo blanco del modo
+   modernización no debe afectar al hero) */
+#inicio.hero-selva{
+    background:var(--selva-profunda);
+    border:none;
+    box-shadow:none;
+    padding:0 !important;
+    margin:0;
+}
+.hero-contenido h1{
+    color:var(--sol-tropical);
+    text-shadow:0 3px 10px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.9);
+}
+.hero-contenido .lead{
+    color:#ffffff;
+    font-weight:600;
+    text-shadow:0 2px 8px rgba(0,0,0,.85);
+}
+.dashboard-link > a.text-reset{ font-weight:600; }
+.dashboard-link .btn{ min-width:7rem; }
+
+/* ---------- Animaciones ---------- */
+.card,.stat-card,.dashboard-link,.page-shell{ animation:aparecer .4s ease both; }
+@keyframes aparecer{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+}
+
+/* ---------- Responsive adicional ---------- */
+@media (max-width:768px){
+    .page-shell{ padding:1.15rem; }
+    .table thead th{ font-size:.75rem; }
+}
+
+/* Catálogo de productos amazónicos (página de inicio): 3 columnas,
+   todo visible sin deslizar. */
+#contenido-dinamico .table td,#contenido-dinamico .table th{
+    white-space:normal;
+    overflow-wrap:anywhere;
+}
+#contenido-dinamico .table th:nth-child(1),
+#contenido-dinamico .table td:nth-child(1){ width:28%; }
+#contenido-dinamico .table th:nth-child(2),
+#contenido-dinamico .table td:nth-child(2){ width:52%; }
+#contenido-dinamico .table th:nth-child(3),
+#contenido-dinamico .table td:nth-child(3){ width:20%; }
+
+/* ==========================================================
+   AJUSTES DE ESTABILIDAD EN LA PÁGINA DE INICIO (zoom 100%)
+   Evita que las columnas y tarjetas se deformen o aplasten.
+   ========================================================== */
+
+/* Texto: sin justificado forzado (creaba huecos raros) y con
+   corte correcto de palabras largas */
+p,li,td,th,div,h1,h2,h3,h4,h5{
+    text-align:left;
+    overflow-wrap:break-word;
+    word-wrap:break-word;
+}
+.text-center,.text-center p,.text-center h1,.text-center h2,.text-center h3,.text-center h4{
+    text-align:center !important;
+}
+footer p,.stat-card,.page-header,.navbar,.table thead th{text-align:center;}
+
+/* Columnas de las filas: nunca más estrechas que su contenido */
+.row>[class*="col-"]{
+    min-width:0;
+}
+
+/* Tarjetas de "Productos Disponibles": imagen proporcional,
+   sin altura fija que aplaste la foto al 100% de zoom */
+.card-img-top{
+    width:100%;
+    height:auto;
+    aspect-ratio:4/3;
+    object-fit:cover;
+}
+#productos-lista .card-img-top,
+.galeria-inicio .card-img-top{
+    height:auto;
+}
+.card{
+    min-width:0;
+}
+.card-text{
+    overflow-wrap:break-word;
+}
+
+/* "Quiénes Somos": párrafo justificado */
+.parrafo-justificado{
+    text-align:justify;
+}
+
+/* "Quiénes Somos": imagen fluida sin romperse */
+.imagen-quienes{
+    width:100%;
+    max-height:none;
+    aspect-ratio:4/3;
+    object-fit:cover;
+}
+
+/* Oferta dinámica: imagen fluida */
+.imagen-dinamica{
+    width:100%;
+    max-width:380px;
+    height:auto;
+    aspect-ratio:4/3;
+    object-fit:cover;
+}
+
+/* Secciones con menos padding agresivo que empujaba el layout */
+#inicio{
+    padding:2.5rem 1.5rem;
+}
+
+/* Evita desbordes horizontales raros a zoom 100% */
+html,body{
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+/* Salto directo a las secciones (Quiénes Somos, etc.): sin desplazamiento
+   animado NUNCA, ni de scroll ni de aparición del contenido */
+html{
+    scroll-behavior:auto !important;
+}
+section[id], div[id], article[id]{
+    scroll-margin-top:80px;
+    animation:none;
+    transition:none;
+}
+/* ==========================================================================
+   CORRECCIONES DE LAYOUT (zoom 100% / pantallas medianas)
+   1) El navbar con muchos enlaces desbordaba y empujaba "Cerrar sesión"
+      fuera de la pantalla. Ahora el menú puede envolverse en dos líneas
+      en vez de romper el layout.
+   2) La sección de inicio (#inicio) quedaba apretada; padding más moderado.
+   ========================================================================== */
+html, body{
+    max-width:100%;
+    overflow-x:hidden; /* evita el scroll lateral cuando algo se pasa de ancho */
+}
+
+.navbar .container{
+    max-width:100%;
+    padding-left:1rem;
+    padding-right:1rem;
+    flex-wrap:wrap;   /* si no cabe todo, pasa a una segunda línea */
+    row-gap:.35rem;
+}
+
+/* Los enlaces pueden pasar a una segunda fila en vez de salirse de pantalla */
+.navbar .navbar-collapse .navbar-nav{
+    flex-wrap:wrap;
+    row-gap:.25rem;
+}
+
+.navbar .navbar-nav .nav-link{
+    padding:.42rem .65rem;
+    font-size:.92rem;
+    white-space:nowrap;
+}
+
+/* Rango 992-1199px: enlaces apenas más compactos para que la marca
+   "Productos Amazónicos" y todos los enlaces quepan en una línea */
+@media (min-width:992px) and (max-width:1199.98px){
+    .navbar-dark .navbar-nav .nav-link{
+        font-size:.88rem;
+        padding:.35rem .5rem;
+    }
+}
+
+/* El botón "Cerrar sesión" queda parejo con los enlaces: misma altura
+   visual y centrado verticalmente en la fila del menú */
+.navbar .navbar-nav{ align-items:center; }
+.navbar .nav-item.d-flex .btn{
+    padding:.42rem .85rem;
+    font-size:.95rem;
+    line-height:1.4;
+    border:0;
+}
+.navbar .navbar-nav .nav-item form{
+    margin:0;
+}
+.navbar .navbar-nav .nav-item .btn{
+    white-space:nowrap;
+    flex-shrink:0;
+}
+
+/* Menú SIEMPRE colapsado: todos los enlaces viven dentro del icono de
+   rallitas (hamburguesa) en cualquier tamaño de pantalla. */
+
+/* Icono de rallitas: bien visible y alineado a la derecha */
+.navbar-toggler{
+    border:1px solid rgba(255,255,255,.5);
+    padding:.35rem .6rem;
+    flex-shrink:0;
+}
+.navbar-toggler:focus{
+    box-shadow:0 0 0 3px rgba(244,185,66,.45);
+    outline:none;
+}
+.navbar-toggler-icon{
+    filter:invert(1) brightness(1.4); /* rallitas blancas sobre el fondo verde */
+}
+
+/* Panel que se despliega bajo el icono — SOLO en pantallas pequeñas
+   (en escritorio el menú está expandido y se ve transparente como siempre) */
+@media (max-width:991.98px){
+    .navbar-collapse{
+        background:linear-gradient(100deg,var(--selva-profunda),var(--selva-media));
+        border-top:1px solid rgba(255,255,255,.15);
+        margin-top:.4rem;
+        padding:.5rem .75rem .75rem;
+        border-radius:0 0 12px 12px;
+    }
+}
+
+/* La marca "Productos Amazónicos" NUNCA se corta ni se achica:
+   ocupa el ancho que necesita y los enlaces se acomodan alrededor */
+.navbar-brand{
+    flex-shrink:0;
+    white-space:nowrap;
+}
+
+/* Sección de inicio: menos padding para que no se vea apretada ni deformada */
+#inicio{
+    padding:2.5rem 2rem !important;
+}
+@media (max-width:768px){
+    #inicio{
+        padding:1.5rem !important;
+    }
+}
+
+/* ==========================================================================
+   INTERFAZ LLAMATIVA — Formularios de producto/cliente y venta flotante
+   ========================================================================== */
+
+/* ---------- Tarjeta de formulario con banda de color ---------- */
+.tarjeta-formulario{
+    max-width:760px;
+    margin:0 auto;
+    border:1px solid var(--borde);
+    border-radius:18px;
+    background:var(--blanco);
+    box-shadow:var(--sombra-hover);
+    overflow:hidden;
+    animation:aparecer .4s ease both;
+}
+.tarjeta-formulario::before{
+    content:"";
+    display:block;
+    height:6px;
+    background:linear-gradient(90deg,var(--selva-profunda),var(--verde-hoja),var(--sol-tropical));
+}
+
+/* ---------- Encabezado del formulario con icono grande ---------- */
+.cabecera-formulario{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    padding:1.5rem 2rem;
+    background:linear-gradient(135deg,var(--selva-profunda) 0%,var(--selva-media) 55%,var(--verde-amazonia) 130%);
+    color:#fff;
+}
+.cabecera-formulario h1{
+    color:#fff;
+    font-size:1.5rem;
+    margin:0;
+}
+.cabecera-formulario p{
+    color:rgba(255,255,255,.78);
+    font-size:.9rem;
+    margin:.15rem 0 0;
+}
+.cabecera-formulario-icono{
+    flex-shrink:0;
+    width:54px;
+    height:54px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    animation:pulso-suave 2.6s ease-in-out infinite;
+}
+.cabecera-formulario-icono .bi{
+    font-size:1.6rem;
+    color:var(--sol-tropical);
+}
+@keyframes pulso-suave{
+    0%,100%{ transform:scale(1); box-shadow:0 4px 12px rgba(0,0,0,.25); }
+    50%{ transform:scale(1.06); box-shadow:0 6px 18px rgba(244,185,66,.35); }
+}
+
+/* ---------- Cuerpo del formulario ---------- */
+.cuerpo-formulario{
+    padding:1.75rem 2rem 1.5rem;
+}
+.cuerpo-formulario .form-label{
+    display:flex;
+    align-items:center;
+    gap:.4rem;
+}
+.cuerpo-formulario .form-label::before{
+    content:"";
+    display:inline-block;
+    width:4px;
+    height:14px;
+    border-radius:2px;
+    background:var(--sol-tropical);
+}
+.cuerpo-formulario .form-control,
+.cuerpo-formulario .form-select{
+    border-radius:12px;
+    border:1.5px solid var(--borde);
+    padding:.7rem 1rem;
+}
+/* Los selects NO llevan transición ni movimiento: el repintado del
+   desplegable al abrirlo hacía "parpadear" el campo de Estado. */
+.cuerpo-formulario .form-select{
+    transition:none;
+    transform:none;
+}
+.cuerpo-formulario .form-control{
+    transition:border-color .2s ease,box-shadow .2s ease,transform .15s ease;
+}
+.cuerpo-formulario .form-control:hover,
+.cuerpo-formulario .form-select:hover{
+    border-color:#bfd4c6;
+}
+.cuerpo-formulario .form-control:focus,
+.cuerpo-formulario .form-select:focus{
+    border-color:var(--verde-hoja);
+    box-shadow:0 0 0 .25rem rgba(47,164,102,.15);
+}
+/* El enfoque del select solo cambia el borde: sin desplazamiento ni
+   sombras animadas para que la lista desplegable no parpadee. */
+.cuerpo-formulario .form-select:focus{
+    transform:none;
+    box-shadow:none;
+    outline:2px solid var(--verde-hoja);
+    outline-offset:1px;
+}
+
+/* ---------- Acciones: botones grandes y vistosos ---------- */
+.acciones-formulario{
+    display:flex;
+    justify-content:flex-end;
+    gap:.75rem;
+    margin-top:1.5rem;
+    padding-top:1.25rem;
+    border-top:1px dashed var(--borde);
+}
+.acciones-formulario .btn-success{
+    background:linear-gradient(135deg,var(--verde-hoja),var(--verde-amazonia));
+    border:none;
+    box-shadow:0 6px 16px rgba(18,128,92,.35);
+}
+.acciones-formulario .btn-success:hover{
+    background:linear-gradient(135deg,var(--verde-amazonia),var(--selva-media));
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(18,128,92,.45);
+}
+.acciones-formulario .btn-outline-secondary{
+    border-radius:999px;
+}
+@media (max-width:575.98px){
+    .cabecera-formulario{ padding:1.1rem 1.25rem; }
+    .cuerpo-formulario{ padding:1.25rem 1.25rem 1rem; }
+    .acciones-formulario{ flex-direction:column-reverse; }
+    .acciones-formulario .btn{ width:100%; }
+}
+
+/* ---------- Venta flotante más vistosa ---------- */
+#modalCompraRapida .modal-content{
+    border:0;
+    border-radius:16px;
+    overflow:hidden;
+}
+.modal-compra{
+    border:2px solid var(--verde-hoja);
+    border-radius:16px;
+    box-shadow:0 24px 60px rgba(11,61,46,.45);
+}
+/* Banda decorativa superior del header del modal */
+.modal-compra-header{
+    position:relative;
+    background:linear-gradient(120deg,var(--selva-profunda) 0%,var(--verde-amazonia) 70%,var(--rio-amazonico) 130%);
+    padding:.7rem .9rem;
+    overflow:hidden;
+}
+.modal-compra-header::after{
+    content:"";
+    position:absolute;
+    right:-18px;
+    top:-18px;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:rgba(244,185,66,.18);
+    pointer-events:none;
+}
+/* Resumen del producto más destacado */
+.compra-resumen{
+    background:linear-gradient(135deg,var(--verde-suave),#f2fbf6);
+    border:1px solid rgba(47,164,102,.35);
+    border-radius:12px;
+    padding:.55rem .65rem;
+    box-shadow:0 3px 10px rgba(11,61,46,.08);
+}
+.compra-resumen-img{
+    border:2px solid var(--sol-tropical);
+    border-radius:9px;
+}
+.compra-producto-nombre{
+    font-size:.85rem;
+}
+/* Total a pagar más llamativo */
+.compra-total{
+    border-radius:12px;
+    padding:.55rem .75rem;
+    box-shadow:0 4px 14px rgba(11,61,46,.3);
+}
+.compra-total strong{
+    font-size:1.1rem;
+    text-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+/* Botón confirmar: más grande y con gradiente */
+.btn-compra-confirmar{
+    background:linear-gradient(135deg,var(--verde-hoja),var(--verde-amazonia));
+    border:none;
+    font-size:.78rem;
+    padding:.4rem .9rem;
+    box-shadow:0 4px 12px rgba(18,128,92,.4);
+}
+.btn-compra-confirmar:hover{
+    background:linear-gradient(135deg,var(--verde-amazonia),var(--selva-media));
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(18,128,92,.5);
+}
+
+/* ---------- Insignias de estado de factura ---------- */
+/* Pagada: verde · Pendiente: amarillo (por defecto Bootstrap) ·
+   Anulado: rojo fruta para diferenciarlo del amarillo pendiente */
+.badge.bg-danger{
+    background-color:var(--fruta-amazonica) !important;
+    color:#fff;
+}
+
+/* ==========================================================================
+   ESPACIADO COMPACTO — Inicio: secciones pegadas, sin grandes huecos
+   Las utilidades de Bootstrap (p-5, py-5, my-5...) creaban huecos de
+   3rem+ entre bloques; se compactan a un ritmo visual uniforme.
+   ========================================================================== */
+
+/* Continuación de inicio (galería + video) y Quiénes Somos: pegados */
+section.container.p-5{
+    padding-top:1.25rem !important;
+    padding-bottom:.75rem !important;
+}
+#quienes-somos{
+    padding-top:.25rem !important;
+    padding-bottom:2rem !important;
+}
+#quienes-somos h2{ margin-bottom:1.25rem !important; }
+
+/* Productos disponibles: menos aire arriba y abajo */
+#productos-disponibles{
+    padding-top:1rem !important;
+    padding-bottom:1.25rem !important;
+}
+#productos-disponibles h2{ margin-bottom:1.25rem !important; }
+
+/* Galería y video de la continuación, más compactos */
+#galeria-inicio{
+    margin-top:1rem !important;
+    margin-bottom:1.25rem !important;
+}
+.video-amazonico{
+    margin-bottom:.25rem !important;
+}
+.video-amazonico.mb-4{
+    margin-bottom:.25rem !important;
+}
+
+/* Oferta dinámica: sin margen extra que la separe de la sección anterior */
+#producto-dinamico{
+    margin-top:0 !important;
+    margin-bottom:1rem !important;
+    padding-top:.25rem !important;
+    padding-bottom:1.25rem !important;
+}
+
+/* Información del catálogo y registro de producto */
+#contenido-dinamico{
+    padding-top:1rem !important;
+    padding-bottom:1rem !important;
+}
+#registro-producto{
+    margin-top:.5rem !important;
+    margin-bottom:.5rem !important;
+    padding-top:.5rem !important;
+    padding-bottom:1rem !important;
+}
+
+/* Aside + ubicación y contacto: pegados a lo anterior */
+.container.mt-3.mb-3{
+    margin-top:.5rem !important;
+    margin-bottom:.5rem !important;
+}
+#contacto{
+    padding-top:.5rem !important;
+    padding-bottom:1rem !important;
+}
+
+/* Info destacada: menos margen antes del footer */
+#info-destacada{
+    margin-top:1.25rem !important;
+    margin-bottom:.5rem !important;
+}
+#info-destacada .card-body{ padding:1.1rem 1.25rem; }
+
+/* ---------- Toasts flotantes (mensajes flash) ---------- */
+/* fixed: no ocupan espacio en el flujo de la página, así al registrar/editar/
+   comprar algo el contenido NO se desplaza; el usuario queda donde estaba. */
+.zona-toasts{
+    position:fixed;
+    top:4.5rem;              /* debajo del navbar */
+    left:50%;
+    transform:translateX(-50%);
+    z-index:2000;
+    display:flex;
+    flex-direction:column;
+    gap:.5rem;
+    width:min(92vw,26rem);
+    pointer-events:none;      /* el fondo deja pasar clics */
+}
+.toast-flotante{
+    pointer-events:auto;
+    display:flex;
+    align-items:center;
+    gap:.6rem;
+    padding:.65rem .85rem;
+    border-radius:.6rem;
+    background:#fff;
+    color:#212529;
+    box-shadow:0 .5rem 1.25rem rgba(0,0,0,.28);
+    border-left:.35rem solid #0d6efd;
+    font-size:.875rem;
+    animation:toastEntrada .25s ease;
+}
+@keyframes toastEntrada{
+    from{ opacity:0; transform:translateY(-.6rem); }
+    to{ opacity:1; transform:translateY(0); }
+}
+.toast-flotante.toast-success{ border-left-color:#198754; }
+.toast-flotante.toast-success .toast-icono{ color:#198754; }
+.toast-flotante.toast-danger{ border-left-color:#dc3545; }
+.toast-flotante.toast-danger .toast-icono{ color:#dc3545; }
+.toast-flotante.toast-warning{ border-left-color:#ffc107; }
+.toast-flotante.toast-warning .toast-icono{ color:#ffc107; }
+.toast-flotante.toast-info .toast-icono{ color:#0d6efd; }
+.toast-icono{ display:flex; }
+.toast-texto{ flex:1; }
+.toast-cerrar{
+    background:none;
+    border:none;
+    font-size:1.15rem;
+    line-height:1;
+    color:#6c757d;
+    cursor:pointer;
+    padding:0 .1rem;
+}
+.toast-cerrar:hover{ color:#212529; }
+
+/* ---------- Chip del usuario conectado (navbar) ---------- */
+/* Icono de personita + nombre, con el mismo estilo tipo píldora del botón ingresar */
+.chip-usuario{
+    display:inline-flex;
+    align-items:center;
+    gap:.35rem;
+    padding:.28rem .75rem;
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+    color:#1b4332;
+    font-size:.8rem;
+    border:1px solid rgba(0,0,0,.12);
+}
+.chip-usuario:hover{ background:#fff; }
+.chip-usuario i{ font-size:1.05rem; }
+
+/* ---------- Tablas adaptables a celular ---------- */
+/* En pantallas pequeñas cada fila se convierte en una tarjeta: la fila
+   apila sus celdas y cada celda muestra su etiqueta (data-label), así
+   TODA la información se ve completa sin deslizar hacia los lados. */
+@media (max-width: 767.98px) {
+    .tabla-movil thead{
+        display:none;
+    }
+    .tabla-movil,
+    .tabla-movil tbody,
+    .tabla-movil tr,
+    .tabla-movil td{
+        display:block;
+        width:100%;
+    }
+    /* Anula los anchos fijos y nowrap de las reglas de escritorio
+       (.page-shell .table td:nth-child(n){width/nowrap}) que deforman
+       las tarjetas en celular. !important porque esas reglas usan
+       pseudo-clases con mayor especificidad. */
+    .tabla-movil th,
+    .tabla-movil td{
+        width:auto !important;
+        white-space:normal !important;
+    }
+    .tabla-movil tr{
+        margin-bottom:.9rem;
+        border:1px solid rgba(0,0,0,.12);
+        border-radius:.6rem;
+        overflow:hidden;
+        box-shadow:0 .15rem .5rem rgba(0,0,0,.06);
+    }
+    .tabla-movil td{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:.75rem;
+        padding:.5rem .75rem;
+        border:none;
+        border-bottom:1px dashed rgba(0,0,0,.08);
+        text-align:right;
+        font-size:.85rem;
+    }
+    /* El contenido largo (descripción, correo) puede ocupar varias líneas */
+    .tabla-movil td > *{
+        min-width:0;
+        overflow-wrap:break-word;
+    }
+    .tabla-movil td:last-child{
+        border-bottom:none;
+    }
+    /* Etiqueta tomada del atributo data-label de cada celda */
+    .tabla-movil td::before{
+        content:attr(data-label);
+        font-weight:600;
+        color:#1b4332;
+        text-align:left;
+        flex-shrink:0;
+        max-width:45%;
+    }
+    /* Las celdas sin etiqueta (vacías) no muestran nada */
+    .tabla-movil td[data-label=""]::before{
+        content:none;
+    }
+    /* Imagen del producto: miniatura junto */
+    .tabla-movil td img{
+        width:72px;
+        height:54px;
+        object-fit:cover;
+    }
+    /* Botones de acciones: apilados en columna, ancho completo */
+    .tabla-movil td .d-flex,
+    .tabla-movil td form{
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        gap:.4rem;
+    }
+    .tabla-movil td .d-flex > .btn,
+    .tabla-movil td form > .btn{
+        width:100%;
+    }
+    .tabla-movil .btn{
+        min-width:0;
+    }
+}
+
+/* ---------- Botón "Ingresar al sistema": llamativo en el navbar ---------- */
+/* Dorado tropical con gradiente y pulso: resalta sobre el navbar verde */
+.boton-ingresar{
+    display:inline-flex;
+    align-items:center;
+    gap:.35rem;
+    padding:.28rem .75rem;
+    border-radius:999px;
+    font-weight:600;
+    font-size:.8rem;
+    color:var(--selva-profunda) !important;
+    background:linear-gradient(135deg,#ffd166 0%,var(--sol-tropical) 55%,#e6a72e 130%);
+    border:1.5px solid rgba(255,255,255,.5);
+    box-shadow:0 2px 8px rgba(244,185,66,.45);
+    text-decoration:none;
+    white-space:nowrap;
+    transition:transform .15s ease,box-shadow .15s ease,background .2s ease;
+}
+.boton-ingresar .bi{
+    font-size:.9rem;
+}
+.boton-ingresar:hover{
+    color:var(--selva-profunda) !important;
+    background:linear-gradient(135deg,#ffe08a 0%,#f9c74f 55%,#f4b942 130%);
+    transform:translateY(-1px);
+    box-shadow:0 4px 12px rgba(244,185,66,.55);
+}
+.boton-ingresar:active{
+    transform:translateY(0) scale(1);
+}
+@keyframes destello-ingresar{
+    0%,100%{ box-shadow:0 2px 8px rgba(244,185,66,.45); }
+    50%{ box-shadow:0 2px 12px rgba(255,209,102,.8); }
+}
+/* Dentro del menú colapsado (móvil) ocupa todo el ancho disponible */
+@media (max-width:991.98px){
+    .navbar-collapse .nav-item:has(.boton-ingresar){
+        width:100%;
+    }
+    .navbar-collapse .boton-ingresar{
+        justify-content:center;
+        margin:.4rem .5rem;
+    }
+}
+
+/* ==========================================================================
+   VERSIÓN COMPACTA — Formularios (producto/cliente/proveedor/factura)
+   Misma estética llamativa, pero más pequeña: tipografía y rellenos
+   reducidos para que quepa todo sin desplazarse.
+   ========================================================================== */
+
+/* Tarjeta: menos ancha */
+.tarjeta-formulario{
+    max-width:520px;
+    border-radius:14px;
+}
+.tarjeta-formulario::before{ height:5px; }
+
+/* Encabezado: icono y títulos más pequeños */
+.cabecera-formulario{
+    gap:.75rem;
+    padding:1rem 1.4rem;
+}
+.cabecera-formulario h1{
+    font-size:1.1rem !important;
+}
+.cabecera-formulario p{
+    font-size:.76rem;
+}
+.cabecera-formulario-icono{
+    width:40px;
+    height:40px;
+    border-radius:11px;
+}
+.cabecera-formulario-icono .bi{
+    font-size:1.15rem;
+}
+@keyframes pulso-suave{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.05); }
+}
+
+/* Cuerpo: rellenos y campos compactos */
+.cuerpo-formulario{
+    padding:1.1rem 1.4rem 1rem;
+}
+.cuerpo-formulario .form-label{
+    font-size:.78rem;
+    margin-bottom:.2rem;
+}
+.cuerpo-formulario .form-label::before{
+    height:11px;
+}
+.cuerpo-formulario .form-control,
+.cuerpo-formulario .form-select{
+    font-size:.85rem;
+    padding:.42rem .7rem;
+    border-radius:9px;
+}
+/* Los selects NO llevan transición ni movimiento (evita el parpadeo
+   del desplegable de Estado) */
+.cuerpo-formulario .form-select{
+    transition:none;
+    transform:none;
+    box-shadow:none;
+}
+.cuerpo-formulario .form-select:focus{
+    transform:none;
+    box-shadow:none;
+    outline:2px solid var(--verde-hoja);
+    outline-offset:1px;
+}
+.cuerpo-formulario .row.g-3{ row-gap:.6rem; }
+
+/* Acciones: botones medianos */
+.acciones-formulario{
+    gap:.6rem;
+    margin-top:.9rem;
+    padding-top:.8rem;
+}
+.acciones-formulario .btn{
+    font-size:.82rem;
+    padding:.4rem 1rem;
+}
+.acciones-formulario .btn .bi{ font-size:.9rem; }
+
+/* ---------- Ventana flotante de venta: un poco más compacta ---------- */
+#modalCompraRapida .modal-dialog{
+    max-width:270px;
+}
+.modal-compra{
+    font-size:.72rem;
+    border-radius:13px;
+}
+.modal-compra .modal-body{
+    padding:.55rem .65rem;
+}
+.modal-compra .modal-body .form-label{
+    font-size:.58rem;
+}
+.modal-compra .modal-body .form-control-sm{
+    font-size:.68rem;
+    padding:.18rem .4rem;
+}
+.modal-compra-header{
+    padding:.45rem .7rem;
+}
+.modal-compra-header .modal-title{
+    font-size:.76rem;
+}
+.compra-resumen{
+    padding:.4rem .5rem;
+}
+.compra-resumen-img{
+    width:36px;
+    height:36px;
+}
+.compra-producto-nombre{
+    font-size:.72rem;
+}
+.compra-total{
+    padding:.4rem .55rem;
+    font-size:.68rem;
+}
+.compra-total strong{
+    font-size:.9rem;
+}
+.btn-compra-confirmar{
+    font-size:.68rem;
+    padding:.3rem .6rem;
+}
+.modal-compra-footer{
+    padding:.4rem .6rem;
+}
+
+/* ==========================================================================
+   AJUSTE DE SEPARACIÓN ENTRE CAMPOS — un poco más pegados
+   Espacio entre cuadros visible pero pequeño: cerca sin aplastar.
+   ========================================================================== */
+
+/* Formularios: espacio entre filas y etiquetas más justo */
+.cuerpo-formulario .row.g-3{
+    row-gap:.42rem;
+}
+.cuerpo-formulario .form-label{
+    margin-bottom:.12rem;
+}
+/* Sombra flotante sutil que une visualmente etiqueta + campo */
+.cuerpo-formulario .form-control,
+.cuerpo-formulario .form-select{
+    margin-top:0;
+}
+
+/* Ventana flotante de venta: grupos de campos más pegados */
+.modal-compra .modal-body .mb-2{
+    margin-bottom:.22rem !important;
+}
+.modal-compra .modal-body .mb-2 .form-label{
+    margin-bottom:.08rem;
+}
+.compra-resumen{
+    margin-bottom:.3rem;
+}
+.compra-instruccion{
+    margin-bottom:.28rem;
+}
+.compra-total{
+    margin-top:.2rem;
+}
+/* El cuadro del total queda pegado al último campo, sin aire extra */
+.modal-compra .modal-body .row.g-2{
+    row-gap:.18rem;
+}
+
+/* La macro campo_formulario envuelve cada campo en div.mb-3 (1rem):
+   dentro de las tarjetas compactas se reduce para pegar las filas */
+.cuerpo-formulario .mb-3{
+    margin-bottom:.15rem !important;
 }

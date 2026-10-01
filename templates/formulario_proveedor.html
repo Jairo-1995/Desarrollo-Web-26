@@ -1,22 +1,32 @@
 {% extends "base.html" %}
 
+{% from "components/campos_formulario.html" import campo_formulario %}
+
 {% block title %}{{ 'Editar proveedor' if editando else 'Registrar proveedor' }}{% endblock %}
 
 {% block content %}
 <section class="container py-5">
-    <article class="formulario-producto">
-        <h1 class="text-center mb-4">{{ 'Editar proveedor' if editando else 'Registrar proveedor' }}</h1>
-        <form method="post" novalidate>
-            {{ form.hidden_tag() }}
-            {% for field in [form.nombre, form.producto_principal, form.ciudad] %}
-            <div class="mb-3">
-                {{ field.label(class="form-label") }}
-                {{ field(class="form-control") }}
-                {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+    <article class="formulario-producto tarjeta-formulario">
+        <header class="cabecera-formulario">
+            <span class="cabecera-formulario-icono"><i class="bi bi-truck"></i></span>
+            <div>
+                <h1 class="mb-0">{{ 'Editar proveedor' if editando else 'Registrar proveedor' }}</h1>
+                <p class="mb-0">{{ 'Actualiza los datos del proveedor.' if editando else 'Completa los datos para agregar un nuevo proveedor.' }}</p>
             </div>
-            {% endfor %}
-            <button class="btn btn-success" type="submit">{{ 'Guardar cambios' if editando else 'Guardar proveedor' }}</button>
-            <a class="btn btn-outline-secondary" href="{{ url_for('proveedores') }}">Cancelar</a>
+        </header>
+        <form method="post" novalidate class="cuerpo-formulario">
+            {{ form.hidden_tag() }}
+            <div class="row g-3">
+                <div class="col-md-6">{{ campo_formulario(form.nombre) }}</div>
+                <div class="col-md-6">{{ campo_formulario(form.producto_principal) }}</div>
+                <div class="col-md-6">{{ campo_formulario(form.ciudad) }}</div>
+            </div>
+            <div class="acciones-formulario">
+                <a class="btn btn-outline-secondary" href="{{ url_for('proveedores') }}"><i class="bi bi-x-lg"></i> Cancelar</a>
+                <button class="btn btn-success btn-lg" type="submit">
+                    <i class="bi {{ 'bi-save' if editando else 'bi-truck-flatbed' }}"></i> {{ 'Guardar cambios' if editando else 'Guardar proveedor' }}
+                </button>
+            </div>
         </form>
     </article>
 </section>

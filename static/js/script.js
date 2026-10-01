@@ -215,12 +215,18 @@
     const checkoutProductImage = document.getElementById("checkoutProductImage");
     const checkoutName = document.getElementById("checkoutName");
     const checkoutAddress = document.getElementById("checkoutAddress");
+    const checkoutProductoNombre = document.getElementById("checkoutProductoNombre");
+    const checkoutProductoTotal = document.getElementById("checkoutProductoTotal");
+    const compraAccesoModal = document.getElementById("compraAccesoModal");
+    let bsCompraAccesoModal;
+    const compraAccesoProducto = document.getElementById("compraAccesoProducto");
 
     const formularioProducto = document.getElementById("formulario-producto");
     const mensajeProducto = document.getElementById("mensaje-producto");
     const campoNombre = document.getElementById("nombre-producto");
     const campoDescripcion = document.getElementById("descripcion-producto");
     const campoCategoria = document.getElementById("categoria-producto");
+    const campoProveedor = document.getElementById("proveedor-producto");
     const errorNombre = document.getElementById("error-nombre");
     const errorDescripcion = document.getElementById("error-descripcion");
     const errorCategoria = document.getElementById("error-categoria");
@@ -290,7 +296,22 @@
         productoPrecio.textContent = producto.precio;
         productoImagen.src = producto.imagen;
         productoImagen.alt = producto.alt;
-        if (ofertaComprarAhora) ofertaComprarAhora.onclick = () => abrirModalCheckout(producto);
+        // El botón "Comprar ahora" usa la misma ventana flotante de compra
+        // que el resto del sitio (clase .btn-comprar + data-*).
+        if (ofertaComprarAhora) {
+            ofertaComprarAhora.classList.add("btn-comprar");
+            ofertaComprarAhora.dataset.producto = producto.nombre;
+            ofertaComprarAhora.dataset.precio = precioNumerico(producto.precio).toFixed(2);
+            ofertaComprarAhora.dataset.unidad = unidadDeTextoPrecio(producto.precio);
+            ofertaComprarAhora.dataset.origen = "inicio";
+            ofertaComprarAhora.dataset.imagen = producto.imagen;
+        }
+    }
+
+    // Extrae la unidad de un texto de precio tipo "$3.00 por kilogramo"
+    function unidadDeTextoPrecio(textoPrecio) {
+        const coincidencia = String(textoPrecio).match(/por\s+(\S+(?:\s+\S+)?)/i);
+        return coincidencia ? coincidencia[1] : "unidad";
     }
 
     function manejarSeleccionProducto(evento) {
@@ -336,48 +357,43 @@
         }, 2000);
     }
 
+    function precioNumerico(textoPrecio) {
+        // Convierte "$3,50 por kilogramo" o "$5.00" en un número
+        const valor = parseFloat(String(textoPrecio).replace(",", ".").replace(/[^0-9.]/g, ""));
+        return Number.isFinite(valor) ? valor : 0;
+    }
+
     function abrirModalCheckout(producto) {
         checkoutProductName.textContent = producto.nombre;
         checkoutProductPrice.textContent = producto.precio;
         checkoutProductImage.src = producto.imagen;
         checkoutForm.dataset.productName = producto.nombre;
         checkoutForm.dataset.productPrice = producto.precio;
+        // Campos que se envían al servidor (POST /comprar)
+        checkoutProductoNombre.value = producto.nombre;
+        checkoutProductoTotal.value = precioNumerico(producto.precio).toFixed(2);
         bsCheckoutModal.show();
     }
 
-    function manejarConfirmacionPedido(evento) {
-        evento.preventDefault();
-        const form = evento.target;
-
-        const producto = {
-            nombre: form.dataset.productName,
-            precio: form.dataset.productPrice
-        };
-
-        const cliente = {
-            nombre: checkoutName.value,
-            direccion: checkoutAddress.value
-        };
-
-        const asunto = `Nuevo Pedido de Producto: ${producto.nombre}`;
-        const cuerpoEmail = `
-            ¡Se ha recibido un nuevo pedido!
-
-            **Detalles del Cliente:**
-            - Nombre: ${cliente.nombre}
-            - Dirección de Envío: ${cliente.direccion}
-
-            **Producto Solicitado:**
-            - Producto: ${producto.nombre}
-            - Precio: ${producto.precio}
-        `;
-
-        const mailtoLink = `mailto:amazonicoproduc@gmail.com?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoEmail.trim())}`;
-        window.location.href = mailtoLink;
-
-        bsCheckoutModal.hide();
-        form.reset();
+    // Antes de mostrar la ventana de compra: si no hay sesión, se pide
+    // ingresar o registrarse en la ventana flotante de acceso.
+    function intentarComprar(producto) {
+        if (window.ESTA_AUTENTICADO) {
+            abrirModalCheckout(producto);
+        } else {
+            compraAccesoProducto.textContent = producto.nombre;
+            bsCompraAccesoModal.show();
+        }
     }
+
+    // Manejador de los botones de compra: lo controla el modal reutilizable
+    // (templates/components/modal_compra.html), que se incluye desde base.html
+    // en todas las páginas y registra su propio listener delegado. Aquí no
+    // se duplica: los elementos del checkout antiguo solo existen en index.
+
+    // El formulario de compra se envía de forma nativa a POST /comprar
+    // (Flask registra el cliente y la factura y muestra el mensaje flash;
+    // la validación "required" del HTML se aplica antes de enviar).
 
     function crearTarjetaDisponible(producto) {
         const columna = crearElemento("div", ["col-md-6", "col-lg-4", "mb-4"]);
@@ -389,13 +405,20 @@
         const precio = crearElemento("p", ["text-success", "fw-bold", "fs-5"], producto.precio);
 
         const botonera = crearElemento("div", ["d-flex", "gap-2"]);
-        const botonComprar = crearElemento("button", ["btn", "btn-success", "btn-sm"], "Comprar");
+        // El botón comprar abre la ventana flotante de compra (.btn-comprar):
+        // el manejador global lo detecta con data-producto, data-precio, etc.
+        const botonComprar = crearElemento("button", ["btn", "btn-success", "btn-sm", "btn-comprar"], "Comprar");
         const botonMasInfo = crearElemento("button", ["btn", "btn-outline-secondary", "btn-sm"], "Más Información");
 
         imagen.src = producto.imagen;
         imagen.alt = producto.alt;
         imagen.loading = "lazy";
-        botonComprar.addEventListener("click", () => abrirModalCheckout(producto));
+        botonComprar.type = "button";
+        botonComprar.dataset.producto = producto.nombre;
+        botonComprar.dataset.precio = precioNumerico(producto.precio).toFixed(2);
+        botonComprar.dataset.unidad = unidadDeTextoPrecio(producto.precio);
+        botonComprar.dataset.origen = "inicio";
+        botonComprar.dataset.imagen = producto.imagen;
         botonMasInfo.type = "button";
         botonMasInfo.addEventListener("click", () => mostrarDetalleProducto(producto));
 
@@ -640,6 +663,7 @@
             nombre: producto.nombre,
             descripcion: producto.descripcion,
             categoria: producto.categoria,
+            proveedor: producto.proveedor || "Sin proveedor",
             precio: "Nuevo registro",
             imagen: "/static/img/producto.jpeg",
             alt: producto.nombre
@@ -660,7 +684,8 @@
         return {
             nombre: campoNombre.value.trim(),
             descripcion: campoDescripcion.value.trim(),
-            categoria: campoCategoria.value
+            categoria: campoCategoria.value,
+            proveedor: campoProveedor ? campoProveedor.value : ""
         };
     }
 
@@ -672,10 +697,37 @@
             return;
         }
 
+        return enviarRegistroProducto();
+    }
+
+    async function enviarRegistroProducto() {
         const producto = obtenerDatosFormulario();
+
+        // Guardar en la base de datos (con la relación proveedor_id si se
+        // eligió un proveedor del select).
+        try {
+            const respuesta = await fetch("{{ url_for('registro_rapido_producto') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('input[name="csrf_token"]')?.value || ""
+                },
+                body: JSON.stringify(producto),
+            });
+            const resultado = await respuesta.json();
+            if (!respuesta.ok || !resultado.ok) {
+                mostrarMensaje(resultado.error || "No se pudo registrar el producto en la base de datos.", "alert-danger");
+                return;
+            }
+        } catch (error) {
+            mostrarMensaje("Error de conexión al registrar el producto.", "alert-danger");
+            return;
+        }
+
         agregarRegistroProducto(producto.nombre, producto.descripcion, producto.categoria);
         agregarProductoDinamico(producto);
-        mostrarMensaje(`Producto registrado: ${producto.nombre} | Categoria: ${producto.categoria}`, "alert-success");
+        const textoProveedor = producto.proveedor ? ` | Proveedor: ${producto.proveedor}` : "";
+        mostrarMensaje(`Producto registrado: ${producto.nombre} | Categoria: ${producto.categoria}${textoProveedor}`, "alert-success");
 
         formularioProducto.reset();
         limpiarMensajesFormulario();
@@ -744,7 +796,87 @@
         }
     }
 
+    function saltarAAnclaDirecto(instantaneo) {
+        // Si la URL trae #quienes-somos, #productos-disponibles, etc.,
+        // posiciona la sección de inmediato, sin animación. Se llama al
+        // cargar y de nuevo al terminar de renderizar el contenido
+        // dinámico, porque este cambia la altura de la página.
+        if (!window.location.hash) return;
+        const destino = document.getElementById(window.location.hash.slice(1));
+        if (destino) {
+            // behavior:"instant" siempre: nunca deslizar con animación
+            destino.scrollIntoView({ behavior: "instant", block: "start" });
+            if (instantaneo) window.scrollTo({ top: window.scrollY, behavior: "instant" });
+        }
+    }
+
+    // Salto instantáneo al hacer clic en enlaces internos (#quienes-somos, etc.)
+    // sin que el navegador deslice con animación hasta la sección.
+    function configurarSaltoEnlaces() {
+        document.addEventListener("click", (evento) => {
+            const enlace = evento.target.closest('a[href*="#"]');
+            if (!enlace) return;
+            const url = new URL(enlace.href, window.location.href);
+            if (url.pathname !== window.location.pathname) return; // otra página
+            const destino = document.getElementById(url.hash.slice(1));
+            if (!destino) return;
+            evento.preventDefault();
+            destino.scrollIntoView({ behavior: "instant", block: "start" });
+            // Guarda el ancla en la URL sin provocar otro salto del navegador
+            history.replaceState(null, "", url.hash);
+        });
+    }
+
+    // Toasts flotantes (mensajes flash): cerrar con la "x" y autodescartar
+    // tras unos segundos. Como son position:fixed, al aparecer NO mueven la
+    // página: el usuario se queda viendo el producto comprado/agregado.
+    function configurarToastsFlotantes() {
+        const toasts = document.querySelectorAll(".toast-flotante");
+        if (!toasts.length) return;
+        toasts.forEach((toast) => {
+            const cerrar = () => {
+                toast.style.transition = "opacity .3s ease, transform .3s ease";
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(-.6rem)";
+                setTimeout(() => toast.remove(), 320);
+            };
+            const boton = toast.querySelector(".toast-cerrar");
+            if (boton) boton.addEventListener("click", cerrar);
+            setTimeout(cerrar, 5000);
+        });
+    }
+
+    // Mantener la posición de scroll tras enviar formularios (comprar, agregar,
+    // editar): Flask redirige y la página se recarga, pero guardamos dónde
+    // estaba el usuario y volvemos a ese punto exacto, sin deslizar hacia arriba.
+    function configurarMantenerScroll() {
+        // Al enviar cualquier formulario (compra, registros, etc.), recordamos
+        // la posición vertical actual.
+        document.addEventListener("submit", () => {
+            try { sessionStorage.setItem("scrollTrasAccion", String(window.scrollY)); } catch (e) {}
+        }, true);
+
+        // Al cargar la página, si hay una posición guardada (venimos de una
+        // acción), volvemos ahí de forma INSTANTÁNEA, sin animación.
+        let yGuardado = null;
+        try { yGuardado = sessionStorage.getItem("scrollTrasAccion"); } catch (e) {}
+        if (yGuardado !== null) {
+            try { sessionStorage.removeItem("scrollTrasAccion"); } catch (e) {}
+            const y = parseInt(yGuardado, 10);
+            if (!window.location.hash) {
+                window.scrollTo({ top: y, behavior: "instant" });
+            }
+            // El contenido dinámico puede cambiar la altura de la página
+            // después de cargar: repetimos el salto para asegurar la posición.
+            setTimeout(() => {
+                if (!window.location.hash) window.scrollTo({ top: y, behavior: "instant" });
+            }, 300);
+        }
+    }
+
     function iniciarAplicacion() {
+        configurarMantenerScroll();
+        configurarToastsFlotantes();
         cargarPlantillasBase();
         mostrarGaleriaInicio();
         mostrarProductosDisponibles();
@@ -768,12 +900,16 @@
         if (detalleProductoModal) {
             bsDetalleModal = new bootstrap.Modal(detalleProductoModal);
         }
+        if (compraAccesoModal) {
+            bsCompraAccesoModal = new bootstrap.Modal(compraAccesoModal);
+        }
         if (checkoutModal) {
             bsCheckoutModal = new bootstrap.Modal(checkoutModal);
         }
-        if (checkoutForm) {
-            checkoutForm.addEventListener("submit", manejarConfirmacionPedido);
-        }
+
+
+        configurarSaltoEnlaces();
+        saltarAAnclaDirecto();
     }
 
     // Iniciar la aplicación cuando el DOM esté completamente cargado

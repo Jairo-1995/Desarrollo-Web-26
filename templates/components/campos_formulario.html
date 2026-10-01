@@ -1,0 +1,28 @@
+{# Macro reutilizable para renderizar campos de formulario con Bootstrap.
+
+   Uso:  {% from "components/campos_formulario.html" import campo_formulario %}
+         {{ campo_formulario(form.nombre) }}
+         {{ campo_formulario(form.categoria, clase="form-select") }}
+         {{ campo_formulario(form.total, solo_lectura=true) }}
+#}
+{% macro campo_formulario(field, clase="form-control", solo_lectura=false) %}
+<div class="mb-3">
+    {{ field.label(class="form-label") }}
+    {% if solo_lectura %}
+        {{ field(class="form-control bg-light", readonly=true) }}
+    {% else %}
+        {{ field(class=clase) }}
+    {% endif %}
+    {% for error in field.errors %}
+    <div class="invalid-feedback d-block">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro aviso_sesion_expirada(form) %}
+{% for error in form.csrf_token.errors %}
+<div class="alert alert-danger" role="alert">
+    La sesión del formulario expiró. Recarga la página e inténtalo nuevamente.
+</div>
+{% endfor %}
+{% endmacro %}

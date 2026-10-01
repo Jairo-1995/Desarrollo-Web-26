@@ -1,23 +1,80 @@
 {% extends "base.html" %}
 
+{% from "components/campos_formulario.html" import campo_formulario %}
+
 {% block title %}{{ 'Editar factura' if editando else 'Registrar factura' }}{% endblock %}
 
 {% block content %}
 <section class="container py-5">
-    <article class="formulario-producto">
-        <h1 class="text-center mb-4">{{ 'Editar factura' if editando else 'Registrar factura' }}</h1>
-        <form method="post" novalidate>
-            {{ form.hidden_tag() }}
-            {% for field in [form.numero, form.cliente, form.fecha, form.estado, form.total] %}
-            <div class="mb-3">
-                {{ field.label(class="form-label") }}
-                {{ field(class="form-select" if field.name == "estado" else "form-control") }}
-                {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+    <article class="formulario-producto tarjeta-formulario">
+        <header class="cabecera-formulario">
+            <span class="cabecera-formulario-icono"><i class="bi bi-receipt-cutoff"></i></span>
+            <div>
+                <h1 class="mb-0">{{ 'Editar factura' if editando else 'Registrar factura' }}</h1>
+                <p class="mb-0">{{ 'Actualiza los datos de la factura.' if editando else 'Completa los datos para registrar una nueva factura.' }}</p>
             </div>
-            {% endfor %}
-            <button class="btn btn-success" type="submit">{{ 'Guardar cambios' if editando else 'Guardar factura' }}</button>
-            <a class="btn btn-outline-secondary" href="{{ url_for('facturacion') }}">Cancelar</a>
+        </header>
+        <form method="post" novalidate class="cuerpo-formulario">
+            {{ form.hidden_tag() }}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    {% if editando %}
+                        {{ campo_formulario(form.numero) }}
+                    {% else %}
+                        <!-- Número generado automáticamente (solo lectura) -->
+                        <div class="mb-3">
+                            {{ form.numero.label(class="form-label") }}
+                            {{ form.numero(class="form-control bg-light", readonly=true) }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">{{ campo_formulario(form.cliente) }}</div>
+                <div class="col-md-4">{{ campo_formulario(form.fecha) }}</div>
+                <div class="col-md-4">{{ campo_formulario(form.estado, clase="form-select") }}</div>
+                <div class="col-md-4">{{ campo_formulario(form.cantidad) }}</div>
+                <div class="col-md-6">{{ campo_formulario(form.producto, clase="form-select") }}</div>
+                <div class="col-md-6">{{ campo_formulario(form.total, solo_lectura=true) }}</div>
+            </div>
+            <div class="acciones-formulario">
+                <a class="btn btn-outline-secondary" href="{{ url_for('facturacion') }}"><i class="bi bi-x-lg"></i> Cancelar</a>
+                <button class="btn btn-success btn-lg" type="submit">
+                    <i class="bi {{ 'bi-save' if editando else 'bi-receipt' }}"></i> {{ 'Guardar cambios' if editando else 'Guardar factura' }}
+                </button>
+            </div>
         </form>
     </article>
 </section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // Precios y stock de los productos, inyectados desde Flask.
+    const PRECIOS = {{ precios | tojson }};
+    const STOCKS  = {{ stocks  | tojson }};
+
+    const campoProducto = document.getElementById("producto");
+    const campoCantidad = document.getElementById("cantidad");
+    const campoTotal    = document.getElementById("total");
+
+    function actualizarTotal() {
+        const nombre = campoProducto.value;
+        const cantidad = parseInt(campoCantidad.value, 10) || 0;
+        const precio = PRECIOS[nombre] || 0;
+        // El total se recalcula automáticamente: precio × cantidad.
+        campoTotal.value = precio ? (precio * cantidad).toFixed(2) : "";
+        // Aviso de stock disponible junto a la cantidad.
+        campoCantidad.setCustomValidity("");
+        if (nombre && STOCKS[nombre] !== undefined && cantidad > STOCKS[nombre]) {
+            campoCantidad.setCustomValidity(
+                "Solo hay " + STOCKS[nombre] + " unidades en stock."
+            );
+        }
+    }
+
+    campoProducto.addEventListener("change", actualizarTotal);
+    campoCantidad.addEventListener("input", actualizarTotal);
+    // Calcula el total inicial al cargar (útil al editar una factura).
+    actualizarTotal();
+</script>
 {% endblock %}

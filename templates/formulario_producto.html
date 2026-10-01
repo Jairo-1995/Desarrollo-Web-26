@@ -1,23 +1,95 @@
 {% extends "base.html" %}
 
+{% from "components/campos_formulario.html" import campo_formulario %}
+
 {% block title %}{{ 'Editar producto' if editando else 'Registrar producto' }}{% endblock %}
 
 {% block content %}
 <section class="container py-5">
-    <article class="formulario-producto">
-        <h1 class="text-center mb-4">{{ 'Editar producto' if editando else 'Registrar producto' }}</h1>
-        <form method="post" novalidate>
-            {{ form.hidden_tag() }}
-            {% for field in [form.nombre, form.categoria, form.descripcion, form.precio, form.unidad, form.stock, form.imagen] %}
-            <div class="mb-3">
-                {{ field.label(class="form-label") }}
-                {{ field(class="form-select" if field.name == "categoria" else "form-control") }}
-                {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+    <article class="formulario-producto tarjeta-formulario">
+        <header class="cabecera-formulario">
+            <span class="cabecera-formulario-icono"><i class="bi {{ 'bi-pencil-square' if editando else 'bi-box-seam-fill' }}"></i></span>
+            <div>
+                <h1 class="mb-0">{{ 'Editar producto' if editando else 'Registrar producto' }}</h1>
+                <p class="mb-0">{{ 'Actualiza los datos del catálogo.' if editando else 'Completa los datos para agregar un nuevo producto al catálogo.' }}</p>
             </div>
-            {% endfor %}
-            <button class="btn btn-success" type="submit">{{ 'Guardar cambios' if editando else 'Guardar producto' }}</button>
-            <a class="btn btn-outline-secondary" href="{{ url_for('productos') }}">Cancelar</a>
+        </header>
+        <form method="post" novalidate class="cuerpo-formulario">
+            {{ form.hidden_tag() }}
+            <div class="row g-3">
+                <div class="col-md-6">{{ campo_formulario(form.nombre) }}</div>
+                <div class="col-md-6">{{ campo_formulario(form.categoria, clase="form-select") }}</div>
+                <div class="col-12">{{ campo_formulario(form.descripcion) }}</div>
+                <div class="col-md-4" id="campo-precio">{{ campo_formulario(form.precio) }}</div>
+                <div class="col-md-4">{{ campo_formulario(form.unidad) }}</div>
+                <div class="col-md-4" id="campo-stock">{{ campo_formulario(form.stock) }}</div>
+                <div class="col-12">{{ campo_formulario(form.imagen) }}</div>
+                <div class="col-md-6">{{ campo_formulario(form.proveedor, clase="form-select") }}</div>
+            </div>
+            <div class="acciones-formulario">
+                <a class="btn btn-outline-secondary" href="{{ url_for('productos') }}"><i class="bi bi-x-lg"></i> Cancelar</a>
+                <button class="btn btn-success btn-lg" type="submit">
+                    <i class="bi {{ 'bi-save' if editando else 'bi-plus-circle-fill' }}"></i> {{ 'Guardar cambios' if editando else 'Guardar producto' }}
+                </button>
+            </div>
         </form>
     </article>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    (function () {
+        var campoPrecio = document.querySelector("#campo-precio input");
+        var campoStock = document.querySelector("#campo-stock input");
+
+        // Desbloquea las letras: fuerza el campo como texto en el navegador
+        [campoPrecio, campoStock].forEach(function (campo) {
+            if (campo) {
+                campo.setAttribute("type", "text");
+                campo.setAttribute("inputmode", "text");
+            }
+        });
+
+        var formulario = campoPrecio ? campoPrecio.closest("form") : null;
+
+        function crearMensaje(campo, texto) {
+            var mensajeError = document.createElement("div");
+            mensajeError.className = "text-danger small mt-1 fw-semibold";
+            mensajeError.style.display = "none";
+            mensajeError.textContent = texto;
+            campo.parentNode.appendChild(mensajeError);
+            return mensajeError;
+        }
+
+        var mensajePrecio = campoPrecio ? crearMensaje(campoPrecio, "Agregue el precio (solo se admiten números).") : null;
+        var mensajeStock = campoStock ? crearMensaje(campoStock, "Agregue el stock (solo se admiten números).") : null;
+
+        // Valida que el valor sea un número positivo
+        function esNumeroValido(valor) {
+            var numero = parseFloat(valor);
+            return valor.trim() !== "" && Number.isFinite(numero) && numero >= 0;
+        }
+
+        if (formulario) {
+            formulario.addEventListener("submit", function (evento) {
+                var precioValido = campoPrecio && esNumeroValido(campoPrecio.value);
+                var stockValido = campoStock && esNumeroValido(campoStock.value);
+
+                if (mensajePrecio) {
+                    mensajePrecio.style.display = precioValido ? "none" : "block";
+                    campoPrecio.classList.toggle("is-invalid", !precioValido);
+                }
+                if (mensajeStock) {
+                    mensajeStock.style.display = stockValido ? "none" : "block";
+                    campoStock.classList.toggle("is-invalid", !stockValido);
+                }
+
+                if (!precioValido || !stockValido) {
+                    evento.preventDefault(); // No envía el formulario
+                }
+            });
+        }
+    })();
+</script>
 {% endblock %}

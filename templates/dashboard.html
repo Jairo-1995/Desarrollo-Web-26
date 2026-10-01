@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Administración - Productos Amazónicos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="h3 mb-4">Panel de Administración</h1>
+    <p class="lead">Bienvenido, <strong>{{ usuario.nombre }}</strong> ({{ usuario.email }}).</p>
+
+    <h2 class="h5 mb-3">Accesos rápidos</h2>
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="dashboard-link">
+                <a href="{{ url_for('productos') }}" class="text-decoration-none text-reset">
+                    <span class="dash-icon">📦</span>Productos
+                </a>
+                <a href="{{ url_for('productos') }}" class="btn btn-sm btn-success mt-2">Ingresar</a>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="dashboard-link">
+                <a href="{{ url_for('clientes') }}" class="text-decoration-none text-reset">
+                    <span class="dash-icon">🧑‍💼</span>Clientes
+                </a>
+                <a href="{{ url_for('clientes') }}" class="btn btn-sm btn-success mt-2">Ingresar</a>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="dashboard-link">
+                <a href="{{ url_for('proveedores') }}" class="text-decoration-none text-reset">
+                    <span class="dash-icon">🚚</span>Proveedores
+                </a>
+                <a href="{{ url_for('proveedores') }}" class="btn btn-sm btn-success mt-2">Ingresar</a>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="dashboard-link">
+                <a href="{{ url_for('facturacion') }}" class="text-decoration-none text-reset">
+                    <span class="dash-icon">🧾</span>Facturación
+                </a>
+                <a href="{{ url_for('facturacion') }}" class="btn btn-sm btn-success mt-2">Ingresar</a>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h5 mb-3">Resumen</h2>
+    <div class="row g-4">
+        {% for modulo, total in resumen.items() %}
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card">
+                <p class="stat-num">{{ total }}</p>
+                <p class="stat-label">{{ modulo }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

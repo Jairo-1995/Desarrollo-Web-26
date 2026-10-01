@@ -1,0 +1,33 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Registro - Productos Amazónicos{% endblock %}
+
+{% block auth_content %}
+{% from "components/campos_formulario.html" import campo_formulario, aviso_sesion_expirada %}
+<h1 class="h4 text-center mb-4">Crear una cuenta</h1>
+                    <form method="post" novalidate>
+                        {{ form.hidden_tag() }}
+                        {{ aviso_sesion_expirada(form) }}
+                        {{ campo_formulario(form.nombre) }}
+                        {{ campo_formulario(form.email) }}
+                        {{ campo_formulario(form.password) }}
+                        {{ campo_formulario(form.confirmar_password) }}
+                        <fieldset class="mb-3">
+                            <legend class="fs-6 fw-semibold mb-2">Tipo de cuenta</legend>
+                            {% for subcampo in form.rol %}
+                            <div class="form-check">
+                                {{ subcampo(class="form-check-input") }}
+                                {{ subcampo.label(class="form-check-label") }}
+                            </div>
+                            {% endfor %}
+                            {% for error in form.rol.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </fieldset>
+                        {{ form.enviar(class="btn btn-success w-100") }}
+                </form>
+                <p class="text-center mt-3 mb-0">
+                    ¿Ya tienes cuenta?
+                    <a href="{{ url_for('login') }}">Inicia sesión</a>
+                </p>
+{% endblock %}
