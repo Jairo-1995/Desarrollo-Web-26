@@ -228,66 +228,6 @@
             </article>
         </section>
 
-        <!-- FORMULARIO DE PRODUCTO -->
-        <section id="registro-producto" class="container p-1 mt-3 mb-3">
-            <article class="formulario-producto">
-                <h2 class="text-center mb-4">Registro de Producto</h2>
-
-                <form id="formulario-producto" novalidate>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="mb-3">
-                        <label for="nombre-producto" class="form-label">Nombre del producto</label>
-                        <input type="text" id="nombre-producto" class="form-control" placeholder="Ejemplo: Miel amazonica" minlength="3" maxlength="40" required aria-describedby="ayuda-nombre error-nombre exito-nombre">
-                        <div id="ayuda-nombre" class="form-text">Use entre 3 y 40 caracteres. Solo letras, espacios y numeros.</div>
-                        <div id="error-nombre" class="invalid-feedback"></div>
-                        <div id="exito-nombre" class="valid-feedback"></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="descripcion-producto" class="form-label">Descripcion</label>
-                        <textarea id="descripcion-producto" class="form-control" rows="4" placeholder="Escriba una descripcion breve del producto" minlength="15" maxlength="160" required aria-describedby="contador-descripcion error-descripcion exito-descripcion"></textarea>
-                        <div id="contador-descripcion" class="form-text">0/160 caracteres. Minimo 15.</div>
-                        <div id="error-descripcion" class="invalid-feedback"></div>
-                        <div id="exito-descripcion" class="valid-feedback"></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="categoria-producto" class="form-label">Categoria, tipo o estado</label>
-                        <select id="categoria-producto" class="form-select" required aria-describedby="error-categoria exito-categoria">
-                            <option value="">Seleccione una categoria, tipo o estado</option>
-                            <option value="Artesania">Artesania</option>
-                            <option value="Producto natural">Producto natural</option>
-                            <option value="Fruta exotica">Fruta exotica</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                        <div id="error-categoria" class="invalid-feedback"></div>
-                        <div id="exito-categoria" class="valid-feedback"></div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="proveedor-producto" class="form-label">Proveedor</label>
-                        <select id="proveedor-producto" class="form-select" aria-describedby="ayuda-proveedor">
-                            <option value="">Sin proveedor (opcional)</option>
-                            {% for proveedor in proveedores %}
-                            <option value="{{ proveedor.nombre }}" data-producto="{{ proveedor.producto_principal }}" data-ciudad="{{ proveedor.ciudad }}">
-                                {{ proveedor.nombre }}{% if proveedor.producto_principal %} — {{ proveedor.producto_principal }}{% endif %}{% if proveedor.ciudad %} ({{ proveedor.ciudad }}){% endif %}
-                            </option>
-                            {% endfor %}
-                        </select>
-                        <div id="ayuda-proveedor" class="form-text">Quién suministra este producto (opcional).</div>
-                    </div>
-
-                    <button type="submit" id="boton-registrar" class="btn btn-success">
-                        Registrar Producto
-                    </button>
-                </form>
-
-                <div id="mensaje-producto" class="alert alert-success mt-4 d-none" role="alert"></div>
-                <p class="mt-4 fw-bold">Total de registros creados: <span id="total-registros">0</span></p>
-                <div id="lista-productos" class="row mt-4"></div>
-            </article>
-        </section>
-
         <!-- ASIDE Y UBICACION -->
         <div class="container mt-3 mb-3">
             <div class="row g-4">
